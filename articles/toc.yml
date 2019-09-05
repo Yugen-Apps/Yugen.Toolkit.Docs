@@ -1,0 +1,7 @@
+- name: Getting Started
+  href: gettingStarted.md
+- name: Guidelines
+  href: guidelines.md
+  items:
+  - name: Coding Standard
+    href: guidelines/codingStandard.md
