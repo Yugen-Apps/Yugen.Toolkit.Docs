@@ -1,46 +1,45 @@
-name: DocFx
+name: DocFx Clone And Build
 # This workflow is triggered on push to the repository.
 on: [push]
 
 jobs:
   build:
-    # Job name is DocFx
     name: Clone Repos
-    # This job runs on Linux
     runs-on: ubuntu-latest
     steps:
-      # Checkout
-      - uses: actions/checkout@v1
-        # with:
-        #   path: 'ToolkitDocs'     
+      - uses: actions/checkout@v1   
 
-      # Clone
       - name: Clone
         run: git clone https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
 
-      # Hello
-      - name: Hello
+      - name: Echo
         run: echo ${HOME} ${GITHUB_ACTOR} ${GITHUB_REPOSITORY} ${GITHUB_WORKSPACE} ${GITHUB_SHA} 
         # ${{secrets.TOKEN}} ${{secrets.GITHUB_TOKEN}}
 
-      # Ls
       - name: Ls
         run: ls
 
-      # Ls ToolkitDocs
       - name: Ls /home/runner/work/Toolkit.Docs
-        run: ls /home/runner/work/Toolkit.Docs
+        run: ls /home/runner/work/Toolkit.Docs        
         
-  hello_world_job:
+  docfx_build:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Docfx Build
     steps:
-    # - uses: ./ # Uses an action in the root directory
-    - name: Hello world action step
-      id: hello
-      uses: emiliano84/Toolkit.Docs/.github/actions/hello-world@master
-      with:
-        who-to-greet: 'Mona the Octocat'
-    # Use the output from the `hello` step
-    - name: Get the output time
-      run: echo "The time was ${{ steps.hello.outputs.time }}"
+    - name: Docfx Build Step
+      id: docfx_build
+      uses: emiliano84/Toolkit.Docs/.github/actions/docfx-build@master
+        
+  # hello_world_job:
+  #   runs-on: ubuntu-latest
+  #   name: A job to say hello
+  #   steps:
+  #   # - uses: ./ # Uses an action in the root directory
+  #   - name: Hello world action step
+  #     id: hello
+  #     uses: emiliano84/Toolkit.Docs/.github/actions/hello-world@master
+  #     with:
+  #       who-to-greet: 'Mona the Octocat'
+  #   # Use the output from the `hello` step
+  #   - name: Get the output time
+  #     run: echo "The time was ${{ steps.hello.outputs.time }}"
