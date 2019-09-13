@@ -4,5 +4,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 Testing Code Snippet
 
-[!code-csharp[EdgeTappedListViewEventArgs](../../src/UwpCommunity.Uwp.Controls/Collections/EdgeTappedListViewEventArgs.cs)]
+[!code-csharp[EdgeTappedListViewEventArgs](../../Toolkit/UwpCommunity.Uwp.Controls/Collections/EdgeTappedListViewEventArgs.cs)]
 
