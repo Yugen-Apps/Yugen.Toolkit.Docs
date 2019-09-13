@@ -37,41 +37,29 @@ jobs:
       run: git checkout master
       shell: bash
 
+    - name: Docfx
+      id: docfx
+      run: ".github/scripts/docfx.bat"
+      shell: bash
+
     - name: git subtree add
       run: git subtree add --prefix docs origin/gh-pages  
       continue-on-error: true
       shell: bash
 
-    - name: ls ../
-      run: ls ../
+    - name: Git Add docs
+      run: git add docs/* -f
       shell: bash
 
-    - name: ls
-      run: ls
+    - name: Git Commit
+      run: git commit -m "Docs"
       shell: bash
 
-    - name: ls docfx
-      run: ls docfx
+    # create a local gh-pages branch containing the splitted output folder
+    - name: Git subtree
+      run: git subtree split --prefix docs -b gh-pages 
       shell: bash
-
-    # - name: Docfx
-    #   id: docfx
-    #   run: ".github/scripts/docfx.bat"
-    #   shell: bash
-
-    # - name: Git Add docs
-    #   run: git add docs/* -f
-    #   shell: bash
-
-    # - name: Git Commit
-    #   run: git commit -m "Docs"
-    #   shell: bash
-
-    # # create a local gh-pages branch containing the splitted output folder
-    # - name: Git subtree
-    #   run: git subtree split --prefix docs -b gh-pages 
-    #   shell: bash
-    # # force the push of the gh-pages branch to the remote gh-pages branch at origin
-    # - name: Git Push
-    #   run: git push -f https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/myRepo.git gh-pages:gh-pages
-    #   shell: bash    
+    # force the push of the gh-pages branch to the remote gh-pages branch at origin
+    - name: Git Push
+      run: git push -f https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/myRepo.git gh-pages:gh-pages
+      shell: bash    
