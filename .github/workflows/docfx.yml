@@ -8,6 +8,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1   
 
+    - name: Clone
+      run: git clone https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
+      shell: bash
+
     - name: ls
       run: ls
       shell: bash
@@ -15,10 +19,6 @@ jobs:
     - name: ls docfx
       run: ls docfx
       shell: bash
-
-    # - name: Clone
-    #   run: git clone https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
-    #   shell: bash
 
     # - name: Git Config email
     #   run: git config --global user.email "emiliano84@github.com"
