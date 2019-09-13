@@ -1,5 +1,7 @@
 name: DocFx Clone, Build And Push
-on: [milestone]
+on: 
+  release:
+    types: [created]
 
 jobs:   
   clone_and_push:
