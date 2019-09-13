@@ -1,7 +1,5 @@
 name: DocFx Clone, Build And Push
-on:
-  pull_request:
-    types: [closed]
+on: [milestone]
 
 jobs:   
   clone_and_push:
