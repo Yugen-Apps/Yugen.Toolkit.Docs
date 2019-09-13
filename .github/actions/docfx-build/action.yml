@@ -1,5 +1,0 @@
-name: 'Docfx Build Action'
-description: 'Build Docs With DocFx'
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
