@@ -21,11 +21,11 @@ jobs:
       shell: bash
 
     - name: Git Config remote.origin.url
-      run: git config --global remote.origin.url "https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/myRepo.git"
+      run: git config --global remote.origin.url "https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git"
       shell: bash
         
     - name: git remote add origin
-      run: git remote add origin https://github.com/emiliano84/myRepo
+      run: git remote add origin https://github.com/emiliano84/Toolkit.Docs
       continue-on-error: true
       shell: bash
 
@@ -33,8 +33,8 @@ jobs:
       run: git fetch origin
       shell: bash
 
-    - name: git checkout master
-      run: git checkout master
+    - name: git checkout dev
+      run: git checkout dev
       shell: bash
 
     - name: Docfx
@@ -61,5 +61,5 @@ jobs:
       shell: bash
     # force the push of the gh-pages branch to the remote gh-pages branch at origin
     - name: Git Push
-      run: git push -f https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/myRepo.git gh-pages:gh-pages
+      run: git push -f https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git gh-pages:gh-pages
       shell: bash    
