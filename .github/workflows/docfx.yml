@@ -12,6 +12,40 @@ jobs:
       run: git clone https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
       shell: bash
 
+    - name: Git Config email
+      run: git config --global user.email "emiliano84@github.com"
+      shell: bash
+
+    - name: Git Config name
+      run: git config --global user.name "DocFx Bot"
+      shell: bash
+
+    - name: Git Config remote.origin.url
+      run: git config --global remote.origin.url "https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/myRepo.git"
+      shell: bash
+        
+    - name: git remote add origin
+      run: git remote add origin https://github.com/emiliano84/myRepo
+      continue-on-error: true
+      shell: bash
+
+    - name: git fetch origin
+      run: git fetch origin
+      shell: bash
+
+    - name: git checkout master
+      run: git checkout master
+      shell: bash
+
+    - name: git subtree add
+      run: git subtree add --prefix docs origin/gh-pages  
+      continue-on-error: true
+      shell: bash
+
+    - name: ls ../
+      run: ls ../
+      shell: bash
+
     - name: ls
       run: ls
       shell: bash
@@ -19,36 +53,6 @@ jobs:
     - name: ls docfx
       run: ls docfx
       shell: bash
-
-    # - name: Git Config email
-    #   run: git config --global user.email "emiliano84@github.com"
-    #   shell: bash
-
-    # - name: Git Config name
-    #   run: git config --global user.name "DocFx Bot"
-    #   shell: bash
-
-    # - name: Git Config remote.origin.url
-    #   run: git config --global remote.origin.url "https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/myRepo.git"
-    #   shell: bash
-        
-    # - name: git remote add origin
-    #   run: git remote add origin https://github.com/emiliano84/myRepo
-    #   continue-on-error: true
-    #   shell: bash
-
-    # - name: git fetch origin
-    #   run: git fetch origin
-    #   shell: bash
-
-    # - name: git checkout master
-    #   run: git checkout master
-    #   shell: bash
-
-    # - name: git subtree add
-    #   run: git subtree add --prefix docs origin/gh-pages  
-    #   continue-on-error: true
-    #   shell: bash
 
     # - name: Docfx
     #   id: docfx
