@@ -1,7 +1,13 @@
 name: DocFx Clone, Build And Push
-on: 
-  release:
-    types: [created]
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:    
+      - master   
+      
+# on: 
+  # release:
+  #   types: [created]
 
 jobs:   
   clone_and_push:
