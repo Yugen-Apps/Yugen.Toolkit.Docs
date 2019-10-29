@@ -1,23 +1,18 @@
 name: DocFx Clone, Build And Push
 on:
   push:
-    # Sequence of patterns matched against refs/heads
     branches:    
       - master   
-      
-# on: 
-  # release:
-  #   types: [created]
 
 jobs:   
-  clone_and_push:
+  clone_build_and_push:
     runs-on: windows-latest
     name: Clone, Build And Push
     steps:
     - uses: actions/checkout@v1   
 
     - name: Clone
-      run: git clone https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
+      run: git clone https://emiliano84:${{secrets.PERSONAL_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
       shell: bash
 
     - name: Git Config email
@@ -29,7 +24,7 @@ jobs:
       shell: bash
 
     - name: Git Config remote.origin.url
-      run: git config --global remote.origin.url "https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git"
+      run: git config --global remote.origin.url "https://emiliano84:${{secrets.PERSONAL_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git"
       shell: bash
         
     - name: git remote add origin
@@ -67,7 +62,8 @@ jobs:
     - name: Git subtree
       run: git subtree split --prefix docs -b gh-pages 
       shell: bash
+
     # force the push of the gh-pages branch to the remote gh-pages branch at origin
     - name: Git Push
-      run: git push -f https://emiliano84:${{secrets.GITHUB_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git gh-pages:gh-pages
+      run: git push -f https://emiliano84:${{secrets.PERSONAL_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git gh-pages:gh-pages
       shell: bash    
