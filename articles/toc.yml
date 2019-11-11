@@ -1,7 +1,9 @@
 - name: Getting Started
   href: gettingStarted.md
-- name: Guidelines
-  href: guidelines.md
+- name: How To
+  href: howto.md
   items:
-  - name: Coding Standard
-    href: guidelines/codingStandard.md
+  - name: DocFx
+    href: howto/docfx.md
+  - name: Nuget
+    href: howto/nuget.md
