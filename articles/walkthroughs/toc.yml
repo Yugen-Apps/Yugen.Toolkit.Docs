@@ -1,0 +1,4 @@
+- name: CI/CD Publish DocFx to Github Pages with GitHub Actions
+  href: docfx-github-actions.md
+- name: CI/CD Publish Nuget to GitHub Packages with GitHub Actions
+  href: nuget-github-actions.md

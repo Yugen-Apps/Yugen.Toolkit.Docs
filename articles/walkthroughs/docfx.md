@@ -1,142 +1,110 @@
-# CI/CD Publish DocFx to Github Pages with GitHub Actions
+# Getting Started with DocFX, Powershell and Github Pages
 
-## Why I Wrote this walkthrough
-I went trough several tutorials online to achieve this, but everytime I found a different issue or something that can be improved, so I decide to do twrite this, if you're wondering about the different reasons why I decided to spent some of my time to write something I think useful: 
-- I wanted to use two different repos instead of one, one for my project and one for the docs
-- I wanted to publish the doc website to GitHub pages, in the gh-pages branch, not in another repo
-- Some tutorial are based on the previous workflow file format, now they switched to YAML
-- Some tutorial use Docker and Linux, but since Github actions host support Windows there is really no reason to use something else, this will only slow down our build that will require also the download and installation of Mono
-- Some tutorial include the download DocFX in the workflow, I preferred to include the DocFx folder in the repo 
-- Last but not least, I discovered a GitHub bug that doesn’t trigger the GitHub pages build if you push the repo with your username and password, but you need to use a token
+## Step1. Setup DocFX
 
-## Let's start
-For this walkthrough I’m Assuming that you have already a full working DocFx build setup and you have a repo with your VS solution for example (https://github.com/emiliano84/Toolkit)
+1. Download docfx.zip from (https://github.com/dotnet/docfx/releases) 
+2. Let's assume our visual studio solution is in `C:\Dev\Yugen.Toolkit\`
+3. Create a new folder for the docs in 
+`C:\Dev\Yugen.Toolkit.Docs\`
+4. Unzip `docfx.zip` to `C:\Dev\Yugen.Toolkit.Docs\docfx\`
+5. So now our folder layout is:
 
-### Repository setup
-Let's create a new repository for the docs for example (https://github.com/emiliano84/Toolkit.Docs) and let's add our docfx documenation solution, including the docfx folder that contains the `docfx.exe`
-
-### GitHub Actions Setup
-Let's create a file in `.github/workflows/docfx.yml` this contains all the workflow instructions (https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/workflows/docfx.yml)
-
-- Let’s define our action that will triggered when we push or merge to master branch
-
-```YAML
-name: DocFx Clone, Build And Push
-on:
-  push:
-    branches:    
-      - master   
+```
+|- C:\Dev\
+|   |- Yugen.Toolkit.Docs\
+|   |- docfx\
+|   |- Yugen.Toolkit\
 ```
 
-- Let's define our job and tell him which OS to use
+## Step2. Init a DocFX project
 
-```YAML
-jobs:   
-  clone_build_and_push:
-    runs-on: windows-latest
-    name: Clone, Build And Push
+1. Start powershell under `C:\Dev\Yugen.Toolkit.Docs\`
+2. Call `.\docfx\docfx.exe init -q`. This command generates a `docfx_project` folder with the default `docfx.json` file under it. `docfx.json` is the configuration file `docfx` uses to generate documentation. `-q` option means generating the project quietly using default values, you can also try `.\docfx\docfx.exe init` and follow the instructions to provide your own settings.
+6. So now our folder layout is:
+
+```
+|- C:\Dev\
+|   |- Yugen.Toolkit.Docs\
+|   |- docfx\
+|   |- docfx_project\
+|   |    |- api\
+|   |    |- apidoc\
+|   |    |- articles\
+|   |    |- imges\
+|   |    |- src\
+|   |    |- docfx.json
+|   |    |- toc.yml
+|   |    |- index.yml
+|   |- Yugen.Toolkit\
 ```
 
-- Let's write the steps
+## Step3. Build our website
+Run command `.\docfx\docfx.exe docfx_project/docfx.json`. Note that a new subfolder `_site` is generated under that folder. This is where the static website is generated.
 
-1.  Checkout the current Docs repo
+## Step4. Preview our website
+The generated static website can be published to GitHub pages, Azure websites, or your own hosting services without any further changes. You can also run command `.\docfx\docfx.exe serve docfx_project/_site` to preview the website locally.
 
-```YAML
-steps:
-- uses: actions/checkout@v1   
+If port `8080` is not in use, `docfx` will host `_site` under `http://localhost:8080`. If `8080` is in use, you can use `.\docfx\docfx.exe serve _site -p <port>` to change the port to be used by docfx.
+
+Congrats! You can now see a simple website similar to:
+![1](/images/walkthroughs/docfx/1.png)
+
+## Step5. Add a set of articles to the website
+
+1. Place more `.md` files into `articles`, e.g., `gettingStarted.md`. If the files reference any resources, put those resources into the `images` folder.
+
+2. In order to organize these articles, we add these files into `toc.yml` under `articles` subfolder. The content of `toc.yml` is as below:
+
+```
+- name: Getting Started
+  href: gettingStarted.md
 ```
 
-2. Clone our repository that contains our vs solution
+So now our `docfx_project` folder layout is:
 
-```YAML
- - name: Clone
-    run: git clone https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
-     shell: bash
+```
+|- ...
+|- articles
+|   |- gettingStarted.md
+|   |- toc.yml
+|- images
+|   |- details1_image.png
+```
+Congrats! You can now see a simple website similar to:
+![2](/images/walkthroughs/docfx/2.png)
+
+3. If you want, create a subdirectory into `articles`, e.g., `walkthroughs`, Place more `.md` files into `walkthroughs`, e.g., `docfx-github-actions.md`, `nuget-github-actions.md`.  In order to organize these articles, we add these files into `toc.yml` under `articles\walkthroughs` subfolder. The content of `toc.yml` is as below:
+
+```
+- name: CI/CD Publish DocFx to Github Pages with GitHub Actions
+  href: docfx-github-actions.md
+- name: CI/CD Publish Nuget to GitHub Packages with GitHub Actions
+  href: nuget-github-actions.md
 ```
 
-I defined a USERNAME and PACKAGES_TOKEN secrets, for the token I generate one with the following permissions:  Repo, read:package, write:packages
-Also I’m using Bash as shell instead of the default powershel
+4. Update `articles\toc.yml` as below:
 
-3. Configure our git client
+```
+- name: Getting Started
+  href: gettingStarted.md
+- name: Walkthroughs
+  href: walkthroughs/toc.yml
+  topicHref: walkthroughs/howto.md
+  ```
 
-```YAML
-- name: Git Config email
-  run: git config --global user.email "emiliano84@github.com"
-  shell: bash
+So now our `docfx_project` folder layout is:
 
-- name: Git Config name
-  run: git config --global user.name "DocFx Bot"
-  shell: bash
-
-- name: Git Config remote.origin.url
-  run: git config --global remote.origin.url "https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git"
-  shell: bash
-
-- name: git remote add origin
-  run: git remote add origin https://github.com/emiliano84/Toolkit.Docs
-  continue-on-error: true
-  shell: bash
+```
+|- ...
+|- articles    
+|   |- walkthroughs
+|   |   |- docfx-github-actions.md
+|   |   |- nuget-github-actions.md
+|   |   |- toc.yml
+|   |- gettingStarted.md
+|   |- toc.yml
+|- images
+|    |- details1_image.png
 ```
 
-4. Fetch and checkout
-
-```YAML
-- name: git fetch origin
-  run: git fetch origin
-  shell: bash
-
-- name: git checkout master
-  run: git checkout master
-  shell: bash
-```
-
-5. Execute DocFX (for this I created a script that we'll see later)
-
-```YAML
-- name: Docfx
-  id: docfx
-  run: ".github/scripts/docfx.bat"
-  shell: bash
-```
-
-6. Push the DocFX generated website to gh-pages branch
-
-```YAML
-- name: git subtree add
-  run: git subtree add --prefix docs origin/gh-pages  
-  continue-on-error: true
-  shell: bash
-
-- name: Git Add docs
-  run: git add docs/* -f
-  shell: bash
-
-- name: Git Commit
-  run: git commit -m "Docs"
-  shell: bash
-
-# create a local gh-pages branch containing the splitted output folder
-- name: Git subtree
-  run: git subtree split --prefix docs -b gh-pages 
-  shell: bash
-
-# force the push of the gh-pages branch to the remote gh-pages branch at origin
-- name: Git Push
-  run: git push -f https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git gh-pages:gh-pages
-  shell: bash    
-```
-
-Please note that I changed the default DocFx configuration, the website is generated in a folder called Docs
-
-7. Lets' create the following script file `.github/scripts/docfx.bat`
-(https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/scripts/docfx.bat) 
-
-this file will exectue our docfx build
-`"docfx/docfx.exe" docfx.json --property VisualStudioVersion=16.0`
-
-This will run docfx.exe in the docfx folder, using the docfx.json and passing as property the version of visual studio we want to use... yes because I encountered one more problem, without passing this version, msbuild in docfx try to use the `MSBuild\Microsoft\WindowsXaml\v16.2`, but it doesn’t exist, so we need to tell msbuild to use `MSBuild\Microsoft\WindowsXaml\v16.0`
-
-8. Let’s set our GitHub Pages
-Repository -> Settings -> GitHub Pages -> Source -> gh-pages branch
-
-That's all folks
+![3](/images/walkthroughs/docfx/3.png)

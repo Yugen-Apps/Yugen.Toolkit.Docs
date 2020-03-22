@@ -1,9 +1,5 @@
 - name: Getting Started
   href: gettingStarted.md
 - name: Walkthroughs
-  href: walkthroughs.md
-  items:
-  - name: CI/CD Publish DocFx to Github Pages with GitHub Actions
-    href: walkthroughs/docfx.md
-  - name: CI/CD Publish Nuget to GitHub Packages with GitHub Actions
-    href: walkthroughs/nuget.md
+  href: walkthroughs/toc.yml
+  topicHref: walkthroughs/howto.md

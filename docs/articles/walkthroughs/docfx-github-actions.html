@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>CI/CD Publish DocFx to Github Pages with GitHub Actions </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="CI/CD Publish DocFx to Github Pages with GitHub Actions ">
+    <meta name="generator" content="docfx 2.51.0.0">
+    
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="cicd-publish-docfx-to-github-pages-with-github-actions">CI/CD Publish DocFx to Github Pages with GitHub Actions</h1>
+
+<h2 id="why-i-wrote-this-walkthrough">Why I Wrote this walkthrough</h2>
+<p>I went trough several tutorials online to achieve this, but everytime I found a different issue or something that can be improved, so I decide to do twrite this, if you&#39;re wondering about the different reasons why I decided to spent some of my time to write something I think useful: </p>
+<ul>
+<li>I wanted to use two different repos instead of one, one for my project and one for the docs</li>
+<li>I wanted to publish the doc website to GitHub pages, in the gh-pages branch, not in another repo</li>
+<li>Some tutorial are based on the previous workflow file format, now they switched to YAML</li>
+<li>Some tutorial use Docker and Linux, but since Github actions host support Windows there is really no reason to use something else, this will only slow down our build that will require also the download and installation of Mono</li>
+<li>Some tutorial include the download DocFX in the workflow, I preferred to include the DocFx folder in the repo </li>
+<li>Last but not least, I discovered a GitHub bug that doesn’t trigger the GitHub pages build if you push the repo with your username and password, but you need to use a token</li>
+</ul>
+<h2 id="lets-start">Let&#39;s start</h2>
+<p>For this walkthrough I’m Assuming that you have already a full working DocFx build setup and you have a repo with your VS solution for example (<a href="https://github.com/emiliano84/Toolkit">https://github.com/emiliano84/Toolkit</a>)</p>
+<h3 id="repository-setup">Repository setup</h3>
+<p>Let&#39;s create a new repository for the docs for example (<a href="https://github.com/emiliano84/Toolkit.Docs">https://github.com/emiliano84/Toolkit.Docs</a>) and let&#39;s add our docfx documenation solution, including the docfx folder that contains the <code>docfx.exe</code></p>
+<h3 id="github-actions-setup">GitHub Actions Setup</h3>
+<p>Let&#39;s create a file in <code>.github/workflows/docfx.yml</code> this contains all the workflow instructions (<a href="https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/workflows/docfx.yml">https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/workflows/docfx.yml</a>)</p>
+<ul>
+<li>Let’s define our action that will triggered when we push or merge to master branch</li>
+</ul>
+<pre><code class="lang-YAML">name: DocFx Clone, Build And Push
+on:
+  push:
+    branches:    
+      - master   
+</code></pre><ul>
+<li>Let&#39;s define our job and tell him which OS to use</li>
+</ul>
+<pre><code class="lang-YAML">jobs:   
+  clone_build_and_push:
+    runs-on: windows-latest
+    name: Clone, Build And Push
+</code></pre><ul>
+<li>Let&#39;s write the steps</li>
+</ul>
+<ol>
+<li>Checkout the current Docs repo</li>
+</ol>
+<pre><code class="lang-YAML">steps:
+- uses: actions/checkout@v1   
+</code></pre><ol>
+<li>Clone our repository that contains our vs solution</li>
+</ol>
+<pre><code class="lang-YAML"> - name: Clone
+    run: git clone https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
+     shell: bash
+</code></pre><p>I defined a USERNAME and PACKAGES_TOKEN secrets, for the token I generate one with the following permissions:  Repo, read:package, write:packages
+Also I’m using Bash as shell instead of the default powershel</p>
+<ol>
+<li>Configure our git client</li>
+</ol>
+<pre><code class="lang-YAML">- name: Git Config email
+  run: git config --global user.email &quot;emiliano84@github.com&quot;
+  shell: bash
+
+- name: Git Config name
+  run: git config --global user.name &quot;DocFx Bot&quot;
+  shell: bash
+
+- name: Git Config remote.origin.url
+  run: git config --global remote.origin.url &quot;https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git&quot;
+  shell: bash
+
+- name: git remote add origin
+  run: git remote add origin https://github.com/emiliano84/Toolkit.Docs
+  continue-on-error: true
+  shell: bash
+</code></pre><ol>
+<li>Fetch and checkout</li>
+</ol>
+<pre><code class="lang-YAML">- name: git fetch origin
+  run: git fetch origin
+  shell: bash
+
+- name: git checkout master
+  run: git checkout master
+  shell: bash
+</code></pre><ol>
+<li>Execute DocFX (for this I created a script that we&#39;ll see later)</li>
+</ol>
+<pre><code class="lang-YAML">- name: Docfx
+  id: docfx
+  run: &quot;.github/scripts/docfx.bat&quot;
+  shell: bash
+</code></pre><ol>
+<li>Push the DocFX generated website to gh-pages branch</li>
+</ol>
+<pre><code class="lang-YAML">- name: git subtree add
+  run: git subtree add --prefix docs origin/gh-pages  
+  continue-on-error: true
+  shell: bash
+
+- name: Git Add docs
+  run: git add docs/* -f
+  shell: bash
+
+- name: Git Commit
+  run: git commit -m &quot;Docs&quot;
+  shell: bash
+
+# create a local gh-pages branch containing the splitted output folder
+- name: Git subtree
+  run: git subtree split --prefix docs -b gh-pages 
+  shell: bash
+
+# force the push of the gh-pages branch to the remote gh-pages branch at origin
+- name: Git Push
+  run: git push -f https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git gh-pages:gh-pages
+  shell: bash    
+</code></pre><p>Please note that I changed the default DocFx configuration, the website is generated in a folder called Docs</p>
+<ol>
+<li>Lets&#39; create the following script file <code>.github/scripts/docfx.bat</code>
+(<a href="https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/scripts/docfx.bat">https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/scripts/docfx.bat</a>) </li>
+</ol>
+<p>this file will exectue our docfx build
+<code>&quot;docfx/docfx.exe&quot; docfx.json --property VisualStudioVersion=16.0</code></p>
+<p>This will run docfx.exe in the docfx folder, using the docfx.json and passing as property the version of visual studio we want to use... yes because I encountered one more problem, without passing this version, msbuild in docfx try to use the <code>MSBuild\Microsoft\WindowsXaml\v16.2</code>, but it doesn’t exist, so we need to tell msbuild to use <code>MSBuild\Microsoft\WindowsXaml\v16.0</code></p>
+<ol>
+<li>Let’s set our GitHub Pages
+Repository -&gt; Settings -&gt; GitHub Pages -&gt; Source -&gt; gh-pages branch</li>
+</ol>
+<p>That&#39;s all folks</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/emiliano84/Toolkit.Docs/blob/master/articles/walkthroughs/docfx-github-actions.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
