@@ -91,7 +91,7 @@ You can also run command `.\docfx\docfx.exe serve docs` to preview the website l
 If port `8080` is not in use, `docfx` will host `docs` under `http://localhost:8080`. If `8080` is in use, you can use `.\docfx\docfx.exe serve docs -p <port>` to change the port to be used by docfx.
 
 Congrats! You can now see a simple website similar to:
-![1](/images/walkthroughs/docfx/1.png)
+![1](images/walkthroughs/docfx/1.png)
 
 ## Step5. Add a set of articles to the website
 
@@ -117,7 +117,7 @@ So now our folder layout is:
 ```
 
 Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\docfx.exe serve docs` and navigate to `http://localhost:8080/articles/gettingStarted.html`, you can now see a page similar to:
-![2](/images/walkthroughs/docfx/2.png)
+![2](images/walkthroughs/docfx/2.png)
 
 3. If you want, create a subdirectory into `articles`, e.g., `walkthroughs`, Place more `.md` files into `walkthroughs`, e.g., `docfx-github-actions.md`, `nuget-github-actions.md`.  In order to organize these articles, we add these files into `toc.yml` under `articles\walkthroughs` subfolder. The content of `toc.yml` is as below:
 
@@ -154,7 +154,7 @@ So now our folder layout is:
 ```
 
 Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\docfx.exe serve docs` and navigate to `http://localhost:8080/articles/walkthroughs/index.html`, you can now see a page similar to:
-![3](/images/walkthroughs/docfx/3.png)
+![3](images/walkthroughs/docfx/3.png)
 
 ### Template
 
@@ -194,7 +194,7 @@ And our `docfx.json` file is:
 ```
 
 Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\docfx.exe serve docs`, you can now see a page similar to:
-![4](/images/walkthroughs/docfx/4.png)
+![4](images/walkthroughs/docfx/4.png)
 
 ## Step6. Adding API Documentation to the Website
 
