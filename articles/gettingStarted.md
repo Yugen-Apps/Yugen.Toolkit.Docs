@@ -1,4 +1,4 @@
-![logo](images/logo.png)
+![logo](/Yugen.Toolkit.Docs/images/logo.png)
 
 # Getting Started
 
