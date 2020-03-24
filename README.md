@@ -1,4 +1,5 @@
 # Yugen.Toolkit.Docs
+![logo](/images/logo.png)
 
 ## Getting Started
 Please read the [getting started](https://emiliano84.github.io/Yugen.Toolkit.Docs/articles/gettingStarted.html) page for more detailed information about using the toolkit.
