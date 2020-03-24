@@ -1,3 +1,5 @@
+![logo](/images/logo.png)
+
 # Getting Started
 
 1- Download Visual Studio 2019 and ensure you choose the Universal Windows Platform development Workload in the Visual Studio installer.
@@ -13,10 +15,10 @@ xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
 In your C# page, add the namespaces to the toolkit:
 c#
 using Microsoft.Toolkit.Uwp;
-You can copy and paste code snippets for each feature from the Windows Community Toolkit Sample App.
+You can copy and paste code snippets for each feature from the Toolkit Sample App.
 
 
 Testing Code Snippet
 
-[!code-csharp[EdgeTappedListViewEventArgs](../../Toolkit/UwpCommunity.Uwp.Controls/Collections/EdgeTappedListViewEventArgs.cs)] -->
+[!code-csharp[EdgeTappedListViewEventArgs](../../Yugen.Toolkit/Yugen.Toolkit.Uwp.Controls/Collections/EdgeTappedListViewEventArgs.cs)] -->
 
