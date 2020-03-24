@@ -4,14 +4,14 @@
       "src": [
         {
           "files": [
-            "UwpCommunity.Uwp.Controls/**.csproj"
+            "Yugen.Toolkit.Uwp.Controls/**.csproj"
           ],
           "exclude": [
             "**/obj/**",
             "**/bin/**",
             "docs/**"
           ],
-          "src": "../Toolkit"
+          "src": "../Yugen.Toolkit"
         }
       ],
       "properties": {
@@ -26,12 +26,23 @@
         "files": [
           "toc.yml",
           "index.md",
+          "articles/**/toc.yml",
+          "articles/**.md"
+        ]
+      },
+      {
+        "files": [
           "metadata/toc.yml",
           "metadata/index.md",
-          "articles/**/toc.yml",
-          "articles/**.md",
           "metadata/uwp.controls/*.yml",
           "metadata/uwp.controls/index.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
         ]
       }
     ],
@@ -50,8 +61,10 @@
       "templates/darkfx"
     ],
     "postProcessors": [],
+    "markdownEngineName": "markdig",
     "noLangKeyword": false,
     "keepFileLink": false,
-    "cleanupCacheHistory": false
+    "cleanupCacheHistory": false,
+    "disableGitFeatures": false
   }
 }

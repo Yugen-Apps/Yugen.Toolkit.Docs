@@ -2,4 +2,4 @@
   href: gettingStarted.md
 - name: Walkthroughs
   href: walkthroughs/toc.yml
-  topicHref: walkthroughs/howto.md
+  topicHref: walkthroughs/index.md

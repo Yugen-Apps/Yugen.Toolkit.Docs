@@ -1,4 +1,6 @@
-- name: CI/CD Publish DocFx to Github Pages with GitHub Actions
+- name: -CI/CD Publish DocFx to Github Pages with GitHub Actions
   href: docfx-github-actions.md
-- name: CI/CD Publish Nuget to GitHub Packages with GitHub Actions
+- name: -CI/CD Publish Nuget to GitHub Packages with GitHub Actions
   href: nuget-github-actions.md
+- name: -Getting Started with DocFX, .Net Solution, Powershell and Github Pages
+  href: docfx.md
