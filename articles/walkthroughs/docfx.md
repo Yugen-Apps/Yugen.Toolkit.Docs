@@ -1,5 +1,7 @@
 # Getting Started with DocFX, .Net Solution, Powershell and Github Pages
 
+This tutorial is based on how I generate this Github Pages website, in (https://github.com/emiliano84/Yugen.Toolkit.Docs) and generate documentation for (https://github.com/emiliano84/Yugen.Toolkit) projects
+
 ## Step1. Setup DocFX
 
 1. Download docfx.zip from (https://github.com/dotnet/docfx/releases) 
@@ -41,7 +43,7 @@
   |   |- Yugen.Toolkit\
 ```
 
-## Step3. Build our website
+## Step3. Build our website (GitHub Psges ready)
 
 So now our `docfx.json` file is:
 
@@ -108,10 +110,10 @@ So now our folder layout is:
 
 ```
   |- ...
-  |- articles
+  |- articles\
   |   |- gettingStarted.md
   |   |- toc.yml
-  |- images
+  |- images\
   |   |- logo.png
   |- ...
 ```
@@ -142,8 +144,8 @@ So now our folder layout is:
 
 ```
   |- ...
-  |- articles    
-  |   |- walkthroughs
+  |- articles\ 
+  |   |- walkthroughs\
   |   |   |- docfx-github-actions.md
   |   |   |- index.md
   |   |   |- nuget-github-actions.md
@@ -200,56 +202,27 @@ Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\d
 
 We built a website from a set of `.md` files. We call it `Conceptual Documentation`. Now we will learn to build a website from `.NET source code`, which is called `API Documentation`. We will also integrate `Conceptual Documentation` and `API Documentation` into one website so that we can navigate from `Conceptual` to `API`, or `API` to `Conceptual` seamlessly.
 
-So now our `docfx_project` folder layout is:
+So now our folder layout is:
 
 ```
   |- ...
-  |- articles    
-  |   |- walkthroughs
+  |- articles\
+  |   |- walkthroughs\
   |   |   |- docfx-github-actions.md
   |   |   |- nuget-github-actions.md
   |   |   |- toc.yml
   |   |- gettingStarted.md
   |   |- toc.yml
-  |- images
+  |- images\
   |    |- details1_image.png
-  |- api
+  |- api\
+  |    |- .gitignore
   |    |- index.md
   |    |- toc.yml
   |- ...
 ```
 
-## Step7. Generate Github Pages
-
-To generate Github Pages, for the sake of semplicity,  we're goin to move the content of `docfx_project` to `C:\Dev\Yugen.Toolkit.Docs\`.
-So now our `C:\Dev\Yugen.Toolkit.Docs\` folder layout is:
-
-```
-|- C:\Dev\
-|   |- Yugen.Toolkit.Docs\
-|   |    |- docfx\
-|   |    |- api\
-|   |    |- apidoc\
-|   |    |- articles\
-|   |    |- imges\
-|   |    |- src\
-|   |    |- docfx.json
-|   |    |- toc.yml
-|   |    |- index.yml
-|   |- Yugen.Toolkit\
-```
-
-
-Run command `.\docfx\docfx.exe docfx_project/docfx.json`. Note that a new subfolder `docs` is generated under that folder. This is where the static website is generated.
-The generated static website can be published to GitHub pages, You can also run command `.\docfx\docfx.exe serve docs` to preview the website locally.
-
-## Step7. Add a C# project
-
-By default `DocFX` use the `src` folder to generate documentation from the code, but we're going to use `C:\Dev\Yugen.Toolkit\`, to do this we need to edit the `docfx.json` file, and change the `src` parameter, we'll see it in the next step.
-
-## Step8. Generate metadata for the C# project
-
-So now our `docfx.json` file is:
+And our `docfx.json` file is:
 
 ```
   "metadata": [
@@ -266,14 +239,18 @@ So now our `docfx.json` file is:
       "disableDefaultFilter": false
     }
   ],
+  ...
 ```
 
-We're going to generate `metadata` for `Yugen.Toolkit.Uwp.Controls` project, to do this we're going to change the follwing parameters:
+1. Add a C# project
+
+By default `DocFX` use the `src` folder to generate documentation from the code, but we're going to use `C:\Dev\Yugen.Toolkit\`, to do this we need to make some changes in the `docfx.json` file. In this example we're going to generate `metadata` for `Yugen.Toolkit.Uwp.Controls` project, to do this we're going to change the follwing parameters:
 1. Change `files` from `src/**.csproj` to `Yugen.Toolkit.Uwp.Controls/**.csproj`
 2. Add to `exclude` the following folders `**/obj/**`, `**/bin/**`, `docs/**`
-3. Add to `src` our solution folder `../Yugen.Toolkit`
+3. Add a `src` parameter to `src` with our solution folder `../Yugen.Toolkit`.
 4. Add to `properties` our `TargetFrameworks`: `netstandard2.0`
 5. Change `dest` from `api` to `metadata/uwp.controls` (this is a personal preference)
+6. So now our `docfx.json` file is:
 
 ```
   "metadata": [
@@ -299,56 +276,109 @@ We're going to generate `metadata` for `Yugen.Toolkit.Uwp.Controls` project, to 
       "disableDefaultFilter": false
     }
   ],
-  ```
+  ...
+```
 
-Run `.\docfx\docfx.exe metadata`
-
-
-we need to change from this:
+### If you followed step 5, and like me prefer to generate project metadata to a spcific folder
+1. rename our `api` folder to `metadata`.
+2. Create a `uwp.controls` folder in `metadata`
+3. Move `index.md` and `toc.yml` to `uwp.controls`
+4. So now our folder layout is:
 
 ```
+  |- ...
+  |- articles\ 
+  |   |- walkthroughs\
+  |   |   |- docfx-github-actions.md
+  |   |   |- nuget-github-actions.md
+  |   |   |- toc.yml
+  |   |- gettingStarted.md
+  |   |- toc.yml
+  |- images\
+  |    |- details1_image.png
+  |- metadata\
+  |    |- .gitignore
+  |    |- .uwp.controls\
+  |    |    |- index.md
+  |    |    |- toc.yml
+  |- ...
+```
+
+3. We need to change the our `docfx.json` that now looks like this:
+
+```
+  ...
  "content": [
-      {
-        "files": [
-          "api/**.yml",
-          "api/index.md"
-        ]
-      },
-      {
-        "files": [
-          "articles/**.md",
-          "articles/**/toc.yml",
-          "toc.yml",
-          "*.md"
-        ]
-      }
-    ],
+    {
+      "files": [
+        "api/**.yml",
+        "api/index.md"
+      ]
+    },
+    {
+      "files": [
+        "articles/**.md",
+        "articles/**/toc.yml",
+        "toc.yml",
+        "*.md"
+      ]
+    }
+  ],
+  ...
 ```
 
 to this
 
 ```
-"content": [
-{
-  "files": [
-    "metadata/toc.yml",
-    "metadata/index.md",
-    "metadata/uwp.controls/*.yml",
-    "metadata/uwp.controls/index.md"
-  ]
-},
-{
-  "files": [
-    "articles/**.md",
-    "articles/**/toc.yml",
-    "toc.yml",
-    "*.md"
-  ]
-}
-],
+  ...
+  "content": [
+  {
+    "files": [
+      "metadata/uwp.controls/*.yml",
+      "metadata/uwp.controls/index.md"
+    ]
+  },
+  {
+    "files": [
+      "articles/**.md",
+      "articles/**/toc.yml",
+      "toc.yml",
+      "*.md"
+    ]
+  }
+  ],
+  ...
 ```
 
-than I like to change the following parameters from
+4. Now we need to fix the top nvaigation menu, change `C:\Dev\Yugen.Toolkit.Docs\toc.yml` from this 
+
+```
+  - name: Articles
+    href: articles/
+  - name: Api Documentation
+    href: api/
+    homepage: api/index.md
+```
+
+to this
+
+```
+  - name: Articles
+    href: articles/
+  - name: Uwp.Controls
+    href: metadata/uwp.controls/
+    homepage: metadata/uwp.controls/index.md
+```
+
+## Step7. Generate metadata for the C# project, 
+Run `.\docfx\docfx.exe metadata`
+
+Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\docfx.exe serve docs`, you can now see a page similar to:
+![5](/Yugen.Toolkit.Docs/images/walkthroughs/docfx/5.png)
+
+
+# WIP
+## Step8. Overwrite
 
 ```
   "overwrite": [
