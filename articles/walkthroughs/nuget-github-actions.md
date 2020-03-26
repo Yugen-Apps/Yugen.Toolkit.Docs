@@ -5,14 +5,14 @@ I went trough several issues to achieve this, so I decide to do twrite this, hop
 
 ## Let's start
 Assuming that you already have your repo on GitHub, with you VS solution and projects ready to be packagesd as nuget,
-for example https://github.com/emiliano84/Toolkit
-- https://github.com/emiliano84/Toolkit/tree/master/Yugen.Toolkit.Standard
-- https://github.com/emiliano84/Toolkit/tree/master/Yugen.Toolkit.Uwp
+for example https://github.com/emiliano84/Yugen.Toolkit
+- https://github.com/emiliano84/Yugen.Toolkit/tree/master/Yugen.Toolkit.Standard
+- https://github.com/emiliano84/Yugen.Toolkit/tree/master/Yugen.Toolkit.Uwp
 
 ### GitHub Actions Setup
 Let's create a file in `.github/workflows/nuget.yml` this conatins all the workflow instructions, for example
-- https://github.com/emiliano84/Toolkit/blob/master/.github/workflows/nugetStandard.yml for .net standard
-- https://github.com/emiliano84/Toolkit/blob/master/.github/workflows/nugetUwp.yml for uwp class library
+- https://github.com/emiliano84/Yugen.Toolkit/blob/master/.github/workflows/nugetStandard.yml for .net standard
+- https://github.com/emiliano84/Yugen.Toolkit/blob/master/.github/workflows/nugetUwp.yml for uwp class library
 
 - Let’s define our action that will triggered when we push or merge to master branch
 
@@ -95,12 +95,12 @@ I defined a USERNAME and PACKAGES_TOKEN secrets, for the token I generate one wi
 
 ```
 <Version>1.0.6</Version>
-<PackageProjectUrl>https://github.com/emiliano84/Toolkit</PackageProjectUrl>
-<RepositoryUrl>https://github.com/emiliano84/Toolkit.git</RepositoryUrl>
+<PackageProjectUrl>https://github.com/emiliano84/Yugen.Toolkit</PackageProjectUrl>
+<RepositoryUrl>https://github.com/emiliano84/Yugen.Toolkit.git</RepositoryUrl>
 ```
 
 for example
-https://github.com/emiliano84/Toolkit/blob/master/Yugen.Toolkit.Standard/Yugen.Toolkit.Standard.csproj
+https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Standard/Yugen.Toolkit.Standard.csproj
 
 
 - For the UWP project, you need to update the nuspec file with the following properties
@@ -110,11 +110,11 @@ https://github.com/emiliano84/Toolkit/blob/master/Yugen.Toolkit.Standard/Yugen.T
 <version>1.0.6</version>
 <authors>emiliano84</authors>
 <description>Yugen.Toolkit.Uwp</description>
-<repository type="git" url="https://github.com/emiliano84/Toolkit.git" /> 
-<projectUrl>https://github.com/emiliano84/Toolkit</projectUrl>
+<repository type="git" url="https://github.com/emiliano84/Yugen.Toolkit.git" /> 
+<projectUrl>https://github.com/emiliano84/Yugen.Toolkit</projectUrl>
 ```
 
 for exmple
-https://github.com/emiliano84/Toolkit/blob/master/Yugen.Toolkit.Uwp/Yugen.Toolkit.Uwp.nuspec
+https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Uwp/Yugen.Toolkit.Uwp.nuspec
 
 That's all folks
