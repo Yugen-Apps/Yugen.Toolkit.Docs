@@ -10,13 +10,13 @@ I went trough several tutorials online to achieve this, but everytime I found a 
 - Last but not least, I discovered a GitHub bug that doesn’t trigger the GitHub pages build if you push the repo with your username and password, but you need to use a token
 
 ## Let's start
-For this walkthrough I’m Assuming that you have already a full working DocFx build setup and you have a repo with your VS solution for example (https://github.com/emiliano84/Toolkit)
+For this walkthrough I’m Assuming that you have already a full working DocFx build setup and you have a repo with your VS solution for example (https://github.com/emiliano84/Yugen.Toolkit)
 
 ### Repository setup
-Let's create a new repository for the docs for example (https://github.com/emiliano84/Toolkit.Docs) and let's add our docfx documenation solution, including the docfx folder that contains the `docfx.exe`
+Let's create a new repository for the docs for example (https://github.com/emiliano84/Yugen.Toolkit.Docs) and let's add our docfx documenation solution, including the docfx folder that contains the `docfx.exe`
 
 ### GitHub Actions Setup
-Let's create a file in `.github/workflows/docfx.yml` this contains all the workflow instructions (https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/workflows/docfx.yml)
+Let's create a file in `.github/workflows/docfx.yml` this contains all the workflow instructions (https://github.com/emiliano84/Yugen.Toolkit.Docs/blob/master/.github/workflows/docfx.yml)
 
 - Let’s define our action that will triggered when we push or merge to master branch
 
@@ -50,7 +50,7 @@ steps:
 
 ```YAML
  - name: Clone
-    run: git clone https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.git ../Toolkit
+    run: git clone https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.git ../Yugen.Toolkit
      shell: bash
 ```
 
@@ -69,11 +69,11 @@ Also I’m using Bash as shell instead of the default powershel
   shell: bash
 
 - name: Git Config remote.origin.url
-  run: git config --global remote.origin.url "https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git"
+  run: git config --global remote.origin.url "https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.Docs.git"
   shell: bash
 
 - name: git remote add origin
-  run: git remote add origin https://github.com/emiliano84/Toolkit.Docs
+  run: git remote add origin https://github.com/emiliano84/Yugen.Toolkit.Docs
   continue-on-error: true
   shell: bash
 ```
@@ -122,14 +122,14 @@ Also I’m using Bash as shell instead of the default powershel
 
 # force the push of the gh-pages branch to the remote gh-pages branch at origin
 - name: Git Push
-  run: git push -f https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Toolkit.Docs.git gh-pages:gh-pages
+  run: git push -f https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.Docs.git gh-pages:gh-pages
   shell: bash    
 ```
 
 Please note that I changed the default DocFx configuration, the website is generated in a folder called Docs
 
 7. Lets' create the following script file `.github/scripts/docfx.bat`
-(https://github.com/emiliano84/Toolkit.Docs/blob/master/.github/scripts/docfx.bat) 
+(https://github.com/emiliano84/Yugen.Toolkit.Docs/blob/master/.github/scripts/docfx.bat) 
 
 this file will exectue our docfx build
 `"docfx/docfx.exe" docfx.json --property VisualStudioVersion=16.0`
