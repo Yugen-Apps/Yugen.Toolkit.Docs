@@ -298,7 +298,7 @@ By default `DocFX` use the `src` folder to generate documentation from the code,
   |    |- details1_image.png
   |- metadata\
   |    |- .gitignore
-  |    |- .uwp.controls\
+  |    |- uwp.controls\
   |    |    |- index.md
   |    |    |- toc.yml
   |- ...
@@ -377,10 +377,41 @@ Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\d
 ![5](/Yugen.Toolkit.Docs/images/walkthroughs/docfx/5.png)
 
 
-# WIP
-## Step8. Overwrite
+## Step8. Overwrite Files
+DocFX introduces the concept of `Overwrite File` to modify or add properties to `Models` without changing the input `Conceptual Files` and `Metadata Files`.
+
+`Overwrite Files` are Markdown files with multiple `Overwrite Sections` starting with YAML header block. A valid YAML header for an `Overwrite Section MUST` take the form of valid YAML set between triple-dashed lines and start with property uid. 
+
+For the sake of clarity I rename the `apidoc` folder to `ovewrite` and create a `uwp.controls` folder inside. Here is a basic example of an Overwrite file `C:\Dev\Yugen.Toolkit.Docs\overwrite\uwp.controls\Yugen.Toolkit.Uwp.Controls.Collections.md`:
 
 ```
+---
+uid: Yugen.Toolkit.Uwp.Controls.Collections
+---
+
+This is overwritten content: Code Snippet
+
+[!code-csharp[EdgeTappedListViewEventArgs](../../../Yugen.Toolkit/Yugen.Toolkit.Uwp.Controls/Collections/EdgeTappedListViewEventArgs.cs)]
+```
+
+this files is going to include a code snippet `EdgeTappedListViewEventArgs.cs` in the `Yugen.Toolkit.Uwp.Controls.Collections` page
+So now our folder layout is:
+
+```
+  |- ...
+  |- ovewrite\
+  |    |- uwp.controls\
+  |    |    |- Yugen.Toolkit.Uwp.Controls.Collections.md
+  |- ...
+```
+
+`uid` for an `Overwrite Model` stands for the Unique IDentifier of the Model it will overwrite. So it is allowed to have multiple `Overwrite Sections` with YAML Header containing the same `uid`. For one `Overwrite File`, the latter `Overwrite Section` overwrites the former one with the same `uid`. For different `Overwrite Files`, the order of overwrite is Undetermined. So it is suggested to have `Overwrite Sections` with the same `uid` in the same `Overwrite File`.
+
+### Apply Overwrite Files
+Inside `docfx.json`, `overwrite` is used to specify the `Overwrite Files`. We need to change the our `docfx.json` that now looks like this:
+
+```
+...
   "overwrite": [
       {
         "files": [
@@ -391,23 +422,35 @@ Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\d
           "_site/**"
         ]
       }
-    ],
-    "dest": "_site",
-  ```
+    ]
+...
+```
 
-  to
+to this
 
-  ```
-      "overwrite": [
-      {
-        "files": [
-          "overwrite/**.md"
-        ],
-        "exclude": [
-          "obj/**",
-          "docs/**"
-        ]
-      }
-    ],
-    "dest": "docs",
-  ```
+```
+...
+    "overwrite": [
+    {
+      "files": [
+        "overwrite/**.md"
+      ],
+      "exclude": [
+        "obj/**",
+        "docs/**"
+      ]
+    }
+  ],
+...
+```
+
+Now the page `http://localhost:8080/metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.html` looks like this:
+![6](/Yugen.Toolkit.Docs/images/walkthroughs/docfx/6.png)
+
+But if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\docfx.exe serve docs`, you can now see a page similar to:
+![7](/Yugen.Toolkit.Docs/images/walkthroughs/docfx/7.png)
+
+That's all folks!
+
+For further details refer to (https://dotnet.github.io/docfx/index.html)
+Don't forget to check the rest of walktroughs for CI/CD implementation
