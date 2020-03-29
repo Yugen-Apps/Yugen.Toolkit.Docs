@@ -196,7 +196,7 @@ this task take the current `major` and `minor` version from the current manifest
 
 The last step is to apply this build number to the manifest of our MSIX package. We can use a task created by a third-party developer. Save the YAML file you have updated, and then go back to the Azure DevOps dashboard. Locate the marketplace icon at the top and choose `Browse marketplace`. [link](https://marketplace.visualstudio.com/)
 
-Search for an extension called Manifest Versioning Build Task by Richard Fennell, [link](https://marketplace.visualstudio.com/items?itemName=richardfennellBM.BM-VSTS-Versioning-Task), click it,
+Search for an extension called `Manifest Versioning Build Task` by Richard Fennell, [link](https://marketplace.visualstudio.com/items?itemName=richardfennellBM.BM-VSTS-Versioning-Task), click it,
 and then click `Get it free`. You will initialize the process to add the extension to your Azure
 DevOps account. Once the extension has been installed, you can go back to the pipeline, click
 `Edit`, and add the following step before the `VSBuild` step.
@@ -325,3 +325,105 @@ Now our pipeline YAML file should look like this:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)\AppxPackages'
         ArtifactName: 'drop'
 ```
+
+## Create a release pipeline
+
+Now that you have a build pipeline that produces an MSIX package, you can define a release pipeline that will deploy it to your users. Release pipelines are created in the `Pipelines > Release` section of Azure DevOps. Building a release pipeline is a bit different than the steps we saw in the previous section.
+
+1. Click on `new pipeline` (if you have alreadey other release pipelines, you'll need to click on `new > new release pipeline`)
+2. `Selet a template` Clik on `empty job`
+
+### Artifacts
+1. In the first section, called `Artifacts`, you will have to specify which build output will be used for deployment. The default choice is to use the `build` artifacts, so you will have to select from the `source` list the build pipeline you previously created, in my case `emiliano84.yugen.mosaic.uwp`. I'll keep the resto to default values, `default version` to `Latest` and the `source aias` to `_emiliano84.Yugen.Mosaic.Uwp` and than click on `Add`
+2. Once you have added it, you will notice a lightning symbol near the artifact’s name. If you want you can click it and enable the `Continuous deployment trigger`. It will turn the pipeline into a CD pipeline, which will trigger a new deployment every time a new build pipeline is successfully completed.
+
+### Stages
+In the second part of the template, you can create one or more stages, which are the various phases of the deployment. Each stage is typically mapped with a different environment: development, testing, production, etc. Each stage can run one or more tasks, which will take care of performing the actual deployment. In order to configure a stage, you just need to click the link below the stage name. You will get access to the visual task editor.
+
+## Signing the package
+
+As previously mentioned, it isn’t a good practice to sign the package in the build pipeline. The best place to perform this task is the release pipeline, since it allows us to store the certificate in a safe way, so that we don’t have to share it with other developers.
+
+### Step 1. Generate a certificate
+
+1. Open tha Package.appxmanifest as text and find this string: 
+   `<Identity Name="Contoso.AssetTracker" Version="1.0.0.0"  Publisher="CN=Contoso Software, O=Contoso Corporation, C=US"/>`
+2. Open powershell
+3. Write the following command to generate a certificate: 
+   `New-SelfSignedCertificate -Type Custom -Subject "{Publisher}" -KeyUsage DigitalSignature -FriendlyName "{Name}" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")`
+   EG: 
+   `New-SelfSignedCertificate -Type Custom -Subject "CN=Contoso Software, O=Contoso Corporation, C=US" -KeyUsage DigitalSignature -FriendlyName "Contoso.AssetTracker" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")`
+4. It will create the `.cer` in `Personal\Intermediate certification authorities`
+5. Copy the thumbrint output eg: `92BB2A9F1353EA0F701D73F6C35EC6C5FF3977A8`
+6. Export a .pfx certificate 
+
+   ```
+    $password = ConvertTo-SecureString -String {password} -Force -AsPlainText 
+    Export-PfxCertificate -cert Cert:\CurrentUser\My\{thumbrint} -FilePath {filename}.pfx -Password $password
+  ```
+  EG:
+  ```
+    $password = ConvertTo-SecureString -String MyPassword -Force -AsPlainText 
+    Export-PfxCertificate -cert Cert:\CurrentUser\My\92BB2A9F1353EA0F701D73F6C35EC6C5FF3977A8 -FilePath YugenCert.pfx -Password $password
+  ```
+6. Export a .cert certificate (this is needed if you want ot include the cert in a build, EG for App Center)
+   ```
+    $cert = Get-ChildItem -Path cert:\CurrentUser\My\{thumbrint}
+    Export-Certificate -Cert $cert -FilePath c:\certs\{filename}.cer 
+   ```
+   EG:
+   ```
+    $cert = Get-ChildItem -Path cert:\CurrentUser\My\92BB2A9F1353EA0F701D73F6C35EC6C5FF3977A8
+    Export-Certificate -Cert $cert -FilePath YugenCert.cer 
+   ```
+
+### Step 2. Upload to secure files
+
+1. Navigate to `Pipelines > Library > Secure files`
+2. Click on `+ Secure file`
+3. Upload `YugenCert.pfx` and `YugenCert.cer`
+
+The files will be stored using the Secure File feature provided by Azure DevOps. Thanks to this feature, the file will be safely stored in the cloud without giving anyone the opportunity to download it. The only options are to leverage it in a pipeline or delete it.
+
+### Step 3. 
+
+To achieve this goal, we need to leverage another extension from a third-party developer. Go back to the Marketplace, look for an extension called `Code Signing` by Stefan Kert, [link](https://marketplace.visualstudio.com/items?itemName=stefankert.codesigning) and install it to your Azure DevOps account. After that, go back to the release pipeline you’re building:
+1. Click on `Tasks > Stage 1`
+2. Click on `Agent job` and in `Agent Speciication` select `windows-2019`
+3. Click the + sign near the agent job to add a new task. 
+4. Look for the task called `Code Signing` and add it.
+5. `Secure File` Provide the certificate, select the PFX certificate from the list. 
+6. Define the password of the certificate. It isn’t a good idea to provide the password in
+clear, so for the moment we just define a variable called `$(PfxPassword)`, which we’re
+going to define later.
+7. Specify the file to sign. Since our artifact will contain only an .msixbundle file, we can
+just use a wild card `**/*.msixbundle` to specify this extension.
+8. `Select signtool.exe location` select `Latest version installed`
+9. Click `Save`
+10. Click on `Variables` section of the pipeline to define the password. 
+11. Click `Add` and set as the name `PfxPassword` and, as the value, the real password. 
+12. Click the `lock icon` displayed near the field to hide its value.
+
+## Deploying the application
+The next step is to add a task to deploy the MSIX package, together with the App Installer file and the HTML page, in a location your users will be able to reach. Azure DevOps provide multiple tasks that can be used to achieve this goal:
+- You can use `AzureBlob File Copy` if you want to host your package on an `Azure Blob Storage`.
+- You can use `Azure App Service Deploy` if you want to host your package on an `Azure web application`.
+- You can use `FTP Upload` if you want to host your package on a website hosted by any web provider.
+
+Going into the details in this book would be off topic, since there isn’t a unique solution, but it all depends on the requirements of your project. Additionally, all the tasks are easy to configure. For example, if you want to deploy your package using Azure Blob Storage, you will just have to link your Azure DevOps account with your Azure account and choose which one of your storage accounts will be the destination. Or if you want to deploy over FTP, you will have to provide the FTP URL, port, username, and password.
+
+Another option is to deploy the MSIX package directly on the Microsoft Store, thanks to an extension created by Microsoft. Once you have installed this extension on your Azure DevOps account, you’ll be able to add to your release pipeline one of the two available tasks:
+- `Windows Store – Publish` to publish the application as public.
+- `Windows Store – Flight` to publish the application in a private flight ring.
+
+The first step is to configure the service endpoint, which will allow Azure Pipeline to authenticate to the Store using your Dev Center account. Then you must provide the Application ID, the new metadata (if you want to update them as part of the process), and a reference to the MSIX package created by the build. The selection of the package is made easy by the artifact explorer, which you can invoke by clicking the three dots near the `Package file` field. 
+
+However, there’s a catch. After you have selected the MSIX package, the output will look like the following.
+
+`$(System.DefaultWorkingDirectory)/My build pipeline/drop/ContosoExpenses.Package_2019.5.23.0_Test/ContosoExpenses.Package_2019.5.23.0_x86.msixupload`
+
+As you can see, the path contains the version number of the package, which will change at every build. As such, the release pipeline will complete successfully for the current build, but it will fail for the next ones. The solution is to use one of the global variables, `Build.BuildNumber`, which will be automatically replaced with the correct build number at every iteration.
+
+`$(System.DefaultWorkingDirectory)/My build pipeline/drop/ContosoExpenses.Package_$(Build.BuildNumber)_Test/ContosoExpenses.Package_$(Build.BuildNumber)_x86.msixupload`
+
+Thanks to this task, the updated MSIX package will be automatically submitted to certification at the end of the CI/CD process.
