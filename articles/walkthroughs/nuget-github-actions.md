@@ -1,4 +1,4 @@
-# CI/CD Publish Nuget to GitHub Packages with GitHub Actions
+# CI/CD Build Nuget Packages and Publish to GitHub Packages with GitHub Actions
 
 ## Before we start
 I went trough several issues to achieve this, so I decide to do twrite this, hopefully you'll fine it useful.
