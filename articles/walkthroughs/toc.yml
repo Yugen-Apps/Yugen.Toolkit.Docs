@@ -1,8 +1,8 @@
-- name: - CI/CD UWP: Build, Sign with certificate, Release to App Center and Store with Azure Pipelines
+- name: CI/CD UWP Build, Sign with certificate, Release to App Center and Store with Azure Pipelines
   href: uwp-azure-pipeline.md
-- name: - CI/CD Publish DocFx to Github Pages with GitHub Actions
+- name: CI/CD Publish DocFx to Github Pages with GitHub Actions
   href: docfx-github-actions.md
-- name: - CI/CD Build Nuget Packages and Publish to GitHub Packages with GitHub Actions
+- name: CI/CD Build Nuget Packages and Publish to GitHub Packages with GitHub Actions
   href: nuget-github-actions.md
-- name: - Getting Started with DocFX, .Net Solution, Powershell and Github Pages
+- name: Getting Started with DocFX, .Net Solution, Powershell and Github Pages
   href: docfx.md
