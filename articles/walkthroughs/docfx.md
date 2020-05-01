@@ -200,10 +200,10 @@ Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\d
 
 #### Customize a template
 
-1. Export template: Run docfx template export default, then you'll see default template in _exported_templates\default
-2. Change themes in default template, e.g:
-  - Adding external resource: modify styles\head.tmpl.partial
-  - CSS change: modify styles\docfx.css or styles\main.css
+1. Export template: Run `.\docfx\docfx.exe template export default`, then you'll see default template in `_exported_templates\default`
+2. Edit the files you want to customizem eg:
+  - HTML changes: modify `_exported_templates\default\partials\footer.tmpl.partial` and copy the modified file to `templates\darkfx\partials\footer.tmpl.partial`
+  - CSS changes: modify `_exported_templates\default\styles\docfx.css` or `_exported_templates\default\styles\main.css` and copy the modified file to `templates\darkfx\styles\main.css`
 
 ## Step6. Adding API Documentation to the Website
 
