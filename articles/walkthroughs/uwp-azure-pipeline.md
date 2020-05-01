@@ -339,15 +339,77 @@ Now that you have a build pipeline that produces an MSIX package, you can define
 ### Stages
 In the second part of the template, you can create one or more stages, which are the various phases of the deployment. Each stage is typically mapped with a different environment: development, testing, production, etc. Each stage can run one or more tasks, which will take care of performing the actual deployment. In order to configure a stage, you just need to click the link below the stage name. You will get access to the visual task editor.
 
+- click on `agent job` and in `agent pool` choose `azure pipelines`
+- in `agent specification` choose `windows-2019`
+
+
 ### Deploying the application
 The next step is to add a task to deploy the MSIX package, together with the App Installer file and the HTML page, in a location your users will be able to reach. Azure DevOps provide multiple tasks that can be used to achieve this goal:
 
-#### Option1. Upload your package to Store (Work In Progress)
+#### Option1. Upload your package to Store 
+`Browse marketplace`. [link](https://marketplace.visualstudio.com/) Search for an extension called `Windows Store` by Microsoft Fennell, [link](https://marketplace.visualstudio.com/items?itemName=MS-RDX-MRO.windows-store-publish&targetId=7bf16f40-3940-4da2-b0e0-c6fd1953f534), and install it.
 Once you have installed this extension on your Azure DevOps account, you’ll be able to add to your release pipeline one of the two available tasks:
 - `Windows Store – Publish` to publish the application as public.
 - `Windows Store – Flight` to publish the application in a private flight ring.
 
-The first step is to configure the service endpoint, which will allow Azure Pipeline to authenticate to the Store using your Dev Center account. Then you must provide the Application ID, the new metadata (if you want to update them as part of the process), and a reference to the MSIX package created by the build. The selection of the package is made easy by the artifact explorer, which you can invoke by clicking the three dots near the `Package file` field. 
+##### Step1. Prerequisities
+
+Prerequisites
+1. You must have an Azure AD directory, and you must have global administrator permission for the directory. You can create a new Azure AD from [Partner Center](https://partner.microsoft.com/) > `Settings` > `Users` > `Tenants` > `Create new azure AD`
+
+2. You must associate your Azure AD directory with your Dev Center account to obtain the credentials to allow this extension to access your account and perform actions on your behalf. `Partner Center` > `Settings` > `Users` > `Tenants` > `Associate Azure AD with your Partner Center account`
+  - Login
+  - Click on `confirm`
+  - click on `users`
+  - Click on `Sign in`
+  - Login
+  - click on `add azure ad applications`
+
+
+3. The app you want to publish must already exist: this extension can only publish updates to existing applications. You can create your app in Partner Center.
+
+4. You must have already created at least one submission for your app before you can use the Publish task provided by this extension. If you have not created a submission, the task will fail.
+
+5. More information and extra prerequisites specific to the API can be found here.
+
+##### Step2. Obtaining your credentials
+Your credentials are comprised of three parts: the Azure Tenant ID, the Client ID and the Client secret. Follow these steps to obtain them:
+
+1. In `Partner Center` > `Settings` > `Users` > `Tenants` > `Associate Azure AD with your Partner Center account` add the Azure AD application that represents the app or service that you will use to access submissions for your Dev Center account, and assign it the Manager role. If this application already exists in your Azure AD directory, you can select it on the Add Azure AD applications page to add it to your Dev Center account. Otherwise, you can create a new Azure AD application on the Add Azure AD applications page:
+  - click `Add Azure AD applications`
+  - click `New Azure AD application`
+  - Fill the fields
+  - Check as `Roles`: `Manager`
+  - CLick `Save`
+
+2. Return to the Manage users page, click the name of your Azure AD application to go to the application settings, and copy the Tenant ID and Client ID values.
+
+3. Click Add new key. On the following screen, copy the `Key` value, which corresponds to the Client secret. You will not be able to access this info again after you leave this page, so make sure to not lose it. 
+
+##### Step 3. Create the service connection
+To be able to publish your package in the store we need to authorize Azure DevOps to be able to connect to it. To do that: 
+5. Go back to Azure DevOps 
+6. Navigate to `Project Settings > Service connections` 
+7. Click on `New service connection`
+8. Choose `Windows Dev Center` and click `Next`
+9. Paste the `Azure Tenant Id`, `client is` and `client secret` 
+10. Give it a `Service connection name`
+11. `Grant access permission to all pipelines` need to be chacked
+11. Click `Save`
+
+##### Step3. Set up Release Pipeline Deploy
+
+Now you are ready to use the `Windows Store - Publish` and `Windows Store – Flight` tasks in your Azure DevOps Release Pipeline.
+
+1. Go to your release pipleine
+2. Click on `Tasks > Stage 1`
+8. Click the + sign near the agent job to add a new task. 
+9. Look for the task called `Windows Store - Publish` or `Windows Store – Flight` and `add` it.
+10. Select the `Store service endpoint`
+11. Paste your `application id`, you can find it in `partner center` > `your app` > `product management` > `product identity` > `store id`
+12. Fill in `package file`: your package `**\*.msixupload`
+13. If you want you can fill in the new `metadata` (if you want to update them as part of the process)
+13. `Save`
 
 However, there’s a catch. After you have selected the MSIX package, the output will look like the following.
 
@@ -459,7 +521,7 @@ just use a wild card `**/*.msixbundle` to specify this extension.
 2. Click on `Tasks > Stage 1`
 3. Click the + sign near the agent job to add a new task. 
 4. Look for the task called `Archive files` and `add` it.
-5. Fill `Root folder or file to archive`: `$(System.DefaultWorkingDirectory)/{MyBuildPipeline}/drop/ContosoExpenses.Package_2019.5.23.0_Test` EG: `$(System.DefaultWorkingDirectory)/_emiliano84.Yugen.Mosaic.Uwp/drop/Yugen.Mosaic.Uwp_$(Build.BuildNumber)_Test`
+5. Fill `Root folder or file to archive`: `$(System.DefaultWorkingDirectory)/{MyBuildPipeline}/drop/{packagename}_{BuildNumber}_Test` EG: `$(System.DefaultWorkingDirectory)/_emiliano84.Yugen.Mosaic.Uwp/drop/Yugen.Mosaic.Uwp_$(Build.BuildNumber)_Test`
 6. Uncheck `Prepend root folder name to archive paths`
 7. Fill `Archive file to create`:`$(System.DefaultWorkingDirectory)/_emiliano84.Yugen.Mosaic.Uwp/drop.zip`
 

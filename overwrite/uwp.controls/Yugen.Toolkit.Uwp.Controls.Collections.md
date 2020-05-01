@@ -1,10 +1,10 @@
 ---
-uid: Yugen.Toolkit.Uwp.Controls.Collections
+uid: articles.overwrite
 ---
 
 ### This is just a test
 
-overwrite `Yugen.Toolkit.Uwp.Controls.Collections` content with a csharp `EdgeTappedListViewEventArgs.cs` Code Snippet
+overwrite `articles.overwrite` content with a csharp `EdgeTappedListViewEventArgs.cs` Code Snippet
 
 [!code-csharp[EdgeTappedListViewEventArgs](../../../Yugen.Toolkit/Yugen.Toolkit.Uwp.Controls/Collections/EdgeTappedListViewEventArgs.cs)]
 
