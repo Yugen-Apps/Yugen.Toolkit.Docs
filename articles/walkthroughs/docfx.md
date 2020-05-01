@@ -198,6 +198,13 @@ And our `docfx.json` file is:
 Congrats! Now if you run command `.\docfx\docfx.exe docfx.json`, than `.\docfx\docfx.exe serve docs`, you can now see a page similar to:
 ![4](/Yugen.Toolkit.Docs/images/walkthroughs/docfx/4.png)
 
+#### Customize a template
+
+1. Export template: Run docfx template export default, then you'll see default template in _exported_templates\default
+2. Change themes in default template, e.g:
+  - Adding external resource: modify styles\head.tmpl.partial
+  - CSS change: modify styles\docfx.css or styles\main.css
+
 ## Step6. Adding API Documentation to the Website
 
 We built a website from a set of `.md` files. We call it `Conceptual Documentation`. Now we will learn to build a website from `.NET source code`, which is called `API Documentation`. We will also integrate `Conceptual Documentation` and `API Documentation` into one website so that we can navigate from `Conceptual` to `API`, or `API` to `Conceptual` seamlessly.

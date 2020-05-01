@@ -339,6 +339,10 @@ Now that you have a build pipeline that produces an MSIX package, you can define
 ### Stages
 In the second part of the template, you can create one or more stages, which are the various phases of the deployment. Each stage is typically mapped with a different environment: development, testing, production, etc. Each stage can run one or more tasks, which will take care of performing the actual deployment. In order to configure a stage, you just need to click the link below the stage name. You will get access to the visual task editor.
 
+- click on `agent job` and in `agent pool` choose `azure pipelines`
+- in `agent specification` choose `windows-2019`
+
+
 ### Deploying the application
 The next step is to add a task to deploy the MSIX package, together with the App Installer file and the HTML page, in a location your users will be able to reach. Azure DevOps provide multiple tasks that can be used to achieve this goal:
 
@@ -517,7 +521,7 @@ just use a wild card `**/*.msixbundle` to specify this extension.
 2. Click on `Tasks > Stage 1`
 3. Click the + sign near the agent job to add a new task. 
 4. Look for the task called `Archive files` and `add` it.
-5. Fill `Root folder or file to archive`: `$(System.DefaultWorkingDirectory)/{MyBuildPipeline}/drop/ContosoExpenses.Package_2019.5.23.0_Test` EG: `$(System.DefaultWorkingDirectory)/_emiliano84.Yugen.Mosaic.Uwp/drop/Yugen.Mosaic.Uwp_$(Build.BuildNumber)_Test`
+5. Fill `Root folder or file to archive`: `$(System.DefaultWorkingDirectory)/{MyBuildPipeline}/drop/{packagename}_{BuildNumber}_Test` EG: `$(System.DefaultWorkingDirectory)/_emiliano84.Yugen.Mosaic.Uwp/drop/Yugen.Mosaic.Uwp_$(Build.BuildNumber)_Test`
 6. Uncheck `Prepend root folder name to archive paths`
 7. Fill `Archive file to create`:`$(System.DefaultWorkingDirectory)/_emiliano84.Yugen.Mosaic.Uwp/drop.zip`
 
