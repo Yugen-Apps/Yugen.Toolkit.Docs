@@ -1,6 +1,7 @@
 - name: Getting Started
   href: gettingStarted.md
-- name: Overwrite Example
+- uid: articles.overwrite
+  name: Overwrite Example
   href: overwrite.md
 - name: Walkthroughs
   href: walkthroughs/toc.yml
