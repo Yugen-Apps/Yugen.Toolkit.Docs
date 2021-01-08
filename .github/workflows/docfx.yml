@@ -12,11 +12,11 @@ jobs:
     - uses: actions/checkout@v1   
 
     - name: Clone
-      run: git clone https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.git ../Yugen.Toolkit
+      run: git clone https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/${{secrets.USERNAME}}/Yugen.Toolkit.git ../Yugen.Toolkit
       shell: bash
 
     - name: Git Config email
-      run: git config --global user.email "emiliano84@github.com"
+      run: git config --global user.email "panda-sharp@github.com"
       shell: bash
 
     - name: Git Config name
@@ -24,11 +24,11 @@ jobs:
       shell: bash
 
     - name: Git Config remote.origin.url
-      run: git config --global remote.origin.url "https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.Docs.git"
+      run: git config --global remote.origin.url "https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/${{secrets.USERNAME}}/Yugen.Toolkit.Docs.git"
       shell: bash
         
     - name: git remote add origin
-      run: git remote add origin https://github.com/emiliano84/Yugen.Toolkit.Docs
+      run: git remote add origin https://github.com/${{secrets.USERNAME}}/Yugen.Toolkit.Docs
       continue-on-error: true
       shell: bash
 
@@ -65,5 +65,5 @@ jobs:
 
     # force the push of the gh-pages branch to the remote gh-pages branch at origin
     - name: Git Push
-      run: git push -f https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.Docs.git gh-pages:gh-pages
+      run: git push -f https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/${{secrets.USERNAME}}/Yugen.Toolkit.Docs.git gh-pages:gh-pages
       shell: bash    
