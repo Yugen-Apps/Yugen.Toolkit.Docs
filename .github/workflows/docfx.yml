@@ -2,12 +2,21 @@ name: DocFx Clone, Build And Push
 on:
   push:
     branches:
-      - release/*
+      - main
+  workflow_dispatch:
 
 jobs:
   clone_build_and_push:
     runs-on: windows-latest
     name: Clone, Build And Push
+    env:
+      DOCS_PATH: docs
+      DOCS_PROJECT: docfx_project
+      SOLUTION_FILE: Yugen.Toolkit.sln
+      PROJECT_PATH: Yugen.Toolkit
+      PROJECT_FOLDER: Yugen.Toolkit.Uwp.Controls
+      PROJECT_FILE: Yugen.Toolkit.Uwp.Controls.csproj
+      PROJECT_CONFIGURATION: Release
     steps:
     - name: Dotnet Setup
       uses: actions/setup-dotnet@v3
@@ -17,21 +26,34 @@ jobs:
     - name: Checkout Docs
       uses: actions/checkout@v3
       with:
-        path: docs
+        path: ${{ env.DOCS_PATH }}
 
     - name: Checkout Source
       uses: actions/checkout@v3
       with:
         repository: Yugen-Apps/Yugen.Toolkit
         token: ${{ secrets.GITHUB_TOKEN }}
-        path: Yugen.Toolkit
+        path: ${{ env.PROJECT_PATH }}
+
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+
+    - name: Restore dependencies
+      run: nuget restore ${{ env.PROJECT_PATH }}/${{ env.SOLUTION_FILE }}
+    
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1      
+
+    - name: MSBuild Build
+      run: msbuild ${{ env.PROJECT_PATH }}/${{ env.PROJECT_FOLDER }}/${{ env.PROJECT_FILE }} /p:Configuration=${{ env.PROJECT_CONFIGURATION }} /p:TargetFramwork=uap10.0.18362
 
     - run: dotnet tool update -g docfx
 
-    - run: docfx docs/docfx_project/docfx.json
+    - run: docfx ${{ env.DOCS_PATH }}/${{ env.DOCS_PROJECT }}/docfx.json
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/docfx_project/_site
+        publish_dir: ${{ env.DOCS_PATH }}/${{ env.DOCS_PROJECT }}/_site
+        allow_empty_commit: true
