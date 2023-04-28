@@ -170,11 +170,274 @@
       "version": ""
     },
     {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.EdgeTappedListView.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.EdgeTappedListView.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.EdgeTappedListViewEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.EdgeTappedListViewEventArgs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.CustomDialog.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.CustomDialog.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.CustomDialogTypeEnum.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.CustomDialogTypeEnum.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.NotificationBanner.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.NotificationBanner.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.YugenDialog.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.YugenDialog.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Dialogs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.BarGraph.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.BarGraph.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.DataPathEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.DataPathEventArgs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.ElementObservableObject.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.ElementObservableObject.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Graphs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Menu.TitleImageCommandBar.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Menu.TitleImageCommandBar.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Menu.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Menu.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.UI.AlignmentGrid.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.UI.AlignmentGrid.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.UI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.UI.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.BaseValidating.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.BaseValidating.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingButton.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingButton.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingComboBox.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingComboBox.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingForm.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingForm.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingPasswordBox.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingPasswordBox.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingTextBox.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.ValidatingTextBox.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Validation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Yugen_Toolkit_Uwp_Controls_XamlTypeInfo.XamlMetaDataProvider.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Yugen_Toolkit_Uwp_Controls_XamlTypeInfo.XamlMetaDataProvider.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Yugen_Toolkit_Uwp_Controls_XamlTypeInfo.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Yugen_Toolkit_Uwp_Controls_XamlTypeInfo.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "metadata/uwp.controls/index.md",
       "output": {
         ".html": {
           "relative_path": "metadata/uwp.controls/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "metadata/uwp.controls/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "metadata/uwp.controls/toc.html"
+        },
+        ".json": {
+          "relative_path": "metadata/uwp.controls/toc.json"
         }
       },
       "version": ""
