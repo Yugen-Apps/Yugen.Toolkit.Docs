@@ -1,0 +1,491 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Getting Started with DocFX, .Net Solution, Powershell and Github Pages | Yugen </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Getting Started with DocFX, .Net Solution, Powershell and Github Pages | Yugen ">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.min.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Panda-Sharp/Yugen.Toolkit.Docs/blob/release/0.3/docfx_project/articles/walkthroughs/docfx.md/#L1">
+
+      <script>
+        MathJax = {
+          options: {
+            processHtmlClass: ['tex2jax_process', 'math']
+          }
+        };
+      </script>
+
+      <script type="text/javascript" src="../../styles/docfx.min.js"></script>
+      <script type="text/javascript" src="../../styles/main.js"></script>
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="getting-started-with-docfx-net-solution-powershell-and-github-pages">Getting Started with DocFX, .Net Solution, Powershell and Github Pages</h1>
+
+<p>This tutorial is based on how I generate this Github Pages website, in (<a href="https://github.com/emiliano84/Yugen.Toolkit.Docs">https://github.com/emiliano84/Yugen.Toolkit.Docs</a>) and generate documentation for (<a href="https://github.com/emiliano84/Yugen.Toolkit">https://github.com/emiliano84/Yugen.Toolkit</a>) projects</p>
+<h2 id="step1-setup-docfx">Step1. Setup DocFX</h2>
+<ol>
+<li>Download docfx.zip from (<a href="https://github.com/dotnet/docfx/releases">https://github.com/dotnet/docfx/releases</a>)</li>
+<li>Let's assume our visual studio solution is in <code>C:\Dev\Yugen.Toolkit\</code></li>
+<li>Create a new folder for the docs in
+<code>C:\Dev\Yugen.Toolkit.Docs\</code></li>
+<li>Unzip <code>docfx.zip</code> to <code>C:\Dev\Yugen.Toolkit.Docs\docfx\</code></li>
+<li>So now our folder layout is:</li>
+</ol>
+<pre><code>  |- C:\Dev\
+  |   |- Yugen.Toolkit.Docs\
+  |   |    |- docfx\
+  |   |- Yugen.Toolkit\
+</code></pre>
+<h2 id="step2-init-a-docfx-project">Step2. Init a DocFX project</h2>
+<ol>
+<li>Start powershell under <code>C:\Dev\Yugen.Toolkit.Docs\</code></li>
+<li>Call <code>.\docfx\docfx.exe init -q -o ./</code>.
+<ul>
+<li><code>init</code> helps generates a default project.</li>
+<li><code>docfx.json</code> is the configuration file <code>docfx</code> uses to generate documentation.</li>
+<li><code>-q</code> option means generating the project quietly using default values, you can also try <code>.\docfx\docfx.exe init</code> and follow the instructions to provide your own settings.</li>
+<li><code>-o ./</code> option means generating the project in the current folder.</li>
+</ul>
+</li>
+<li>So now our folder layout is:</li>
+</ol>
+<pre><code>  |- C:\Dev\
+  |   |- Yugen.Toolkit.Docs\
+  |   |    |- docfx\
+  |   |    |- api\
+  |   |    |- apidoc\
+  |   |    |- articles\
+  |   |    |- imges\
+  |   |    |- src\
+  |   |    |- docfx.json
+  |   |    |- toc.yml
+  |   |    |- index.yml
+  |   |- Yugen.Toolkit\
+</code></pre>
+<h2 id="step3-build-our-website-github-psges-ready">Step3. Build our website (GitHub Psges ready)</h2>
+<p>So now our <code>docfx.json</code> file is:</p>
+<pre><code>  ...
+  &quot;overwrite&quot;: [
+      {
+        &quot;files&quot;: [
+          &quot;apidoc/**.md&quot;
+        ],
+        &quot;exclude&quot;: [
+          &quot;obj/**&quot;,
+          &quot;_site/**&quot;
+        ]
+      }
+    ],
+  &quot;dest&quot;: &quot;_site&quot;,
+  ...
+</code></pre>
+<p>We're going to change te <code>dest</code> parameter fron <code>_site</code> to <code>docs</code>, this is where the static website is generated, in this way can be easily deployed to Github Pages</p>
+<pre><code>  ...
+  &quot;overwrite&quot;: [
+  {
+    &quot;files&quot;: [
+      &quot;apidoc/**.md&quot;
+    ],
+    &quot;exclude&quot;: [
+      &quot;obj/**&quot;,
+      &quot;docs/**&quot;
+    ]
+  }
+  ],
+  &quot;dest&quot;: &quot;docs&quot;,
+  ...
+</code></pre>
+<p>Run command <code>.\docfx\docfx.exe docfx.json</code>, a new subfolder <code>docs</code> is generated.</p>
+<p>The generated static website can be published to GitHub pages, Azure websites, or your own hosting services without any further changes.</p>
+<h2 id="step4-preview-our-website">Step4. Preview our website</h2>
+<p>You can also run command <code>.\docfx\docfx.exe serve docs</code> to preview the website locally.</p>
+<p>If port <code>8080</code> is not in use, <code>docfx</code> will host <code>docs</code> under <code>http://localhost:8080</code>. If <code>8080</code> is in use, you can use <code>.\docfx\docfx.exe serve docs -p &lt;port&gt;</code> to change the port to be used by docfx.</p>
+<p>Congrats! You can now see a simple website similar to:
+<img src="/Yugen.Toolkit.Docs/images/walkthroughs/docfx/1.png" alt="1"></p>
+<h2 id="step5-add-a-set-of-articles-to-the-website">Step5. Add a set of articles to the website</h2>
+<ol>
+<li><p>Place more <code>.md</code> files into <code>articles</code>, e.g., <code>gettingStarted.md</code>. If the files reference any resources, put those resources into the <code>images</code> folder.</p>
+</li>
+<li><p>In order to organize these articles, we add these files into <code>toc.yml</code> under <code>articles</code> subfolder. The content of <code>toc.yml</code> is as below:</p>
+</li>
+</ol>
+<pre><code>  - name: Getting Started
+    href: gettingStarted.md
+</code></pre>
+<p>So now our folder layout is:</p>
+<pre><code>  |- ...
+  |- articles\
+  |   |- gettingStarted.md
+  |   |- toc.yml
+  |- images\
+  |   |- logo.png
+  |- ...
+</code></pre>
+<p>Congrats! Now if you run command <code>.\docfx\docfx.exe docfx.json</code>, than <code>.\docfx\docfx.exe serve docs</code> and navigate to <code>http://localhost:8080/articles/gettingStarted.html</code>, you can now see a page similar to:
+<img src="/Yugen.Toolkit.Docs/images/walkthroughs/docfx/2.png" alt="2"></p>
+<ol start="3">
+<li>If you want, create a subdirectory into <code>articles</code>, e.g., <code>walkthroughs</code>, Place more <code>.md</code> files into <code>walkthroughs</code>, e.g., <code>docfx-github-actions.md</code>, <code>nuget-github-actions.md</code>.  In order to organize these articles, we add these files into <code>toc.yml</code> under <code>articles\walkthroughs</code> subfolder. The content of <code>toc.yml</code> is as below:</li>
+</ol>
+<pre><code>  - name: CI/CD Publish DocFx to Github Pages with GitHub Actions
+    href: docfx-github-actions.md
+  - name: CI/CD Publish Nuget to GitHub Packages with GitHub Actions
+    href: nuget-github-actions.md
+</code></pre>
+<ol start="4">
+<li>Update <code>articles\toc.yml</code> as below:</li>
+</ol>
+<pre><code>  - name: Getting Started
+    href: gettingStarted.md
+  - name: Walkthroughs
+    href: walkthroughs/toc.yml
+    topicHref: walkthroughs/index.md
+</code></pre>
+<p>So now our folder layout is:</p>
+<pre><code>  |- ...
+  |- articles\ 
+  |   |- walkthroughs\
+  |   |   |- docfx-github-actions.md
+  |   |   |- index.md
+  |   |   |- nuget-github-actions.md
+  |   |   |- toc.yml
+  |   |- gettingStarted.md
+  |   |- toc.yml
+  |- ...
+</code></pre>
+<p>Congrats! Now if you run command <code>.\docfx\docfx.exe docfx.json</code>, than <code>.\docfx\docfx.exe serve docs</code> and navigate to <code>http://localhost:8080/articles/walkthroughs/index.html</code>, you can now see a page similar to:
+<img src="/Yugen.Toolkit.Docs/images/walkthroughs/docfx/3.png" alt="3"></p>
+<h3 id="template">Template</h3>
+<p>If you would like to change template, you can create your own or go to <code>https://dotnet.github.io/docfx/templates-and-plugins/templates-dashboard.html</code> and download the one that you like, I choosed <code>darkFX</code>.</p>
+<ol>
+<li>Download the theme</li>
+<li>Create a <code>templates</code> folder</li>
+<li>Copy the extracted <code>darkfx</code> folder</li>
+<li>So now our folder layout is:</li>
+</ol>
+<pre><code>  |- C:\Dev\
+  |   |- Yugen.Toolkit.Docs\
+  |   |    |- templates\
+  |   |    |    |- darkfx\
+  |- ...
+</code></pre>
+<p>And our <code>docfx.json</code> file is:</p>
+<pre><code>  ...
+    &quot;template&quot;: [
+        &quot;default&quot;
+      ],
+  ...
+</code></pre>
+<ol start="5">
+<li>Let's add our <code>darkfx</code> to <code>template</code> parameter</li>
+</ol>
+<pre><code>  ...
+  &quot;template&quot;: [
+    &quot;default&quot;,
+    &quot;templates/darkfx&quot;
+  ],
+  ...
+</code></pre>
+<p>Congrats! Now if you run command <code>.\docfx\docfx.exe docfx.json</code>, than <code>.\docfx\docfx.exe serve docs</code>, you can now see a page similar to:
+<img src="/Yugen.Toolkit.Docs/images/walkthroughs/docfx/4.png" alt="4"></p>
+<h4 id="customize-a-template">Customize a template</h4>
+<ol>
+<li>Export template: Run <code>.\docfx\docfx.exe template export default</code>, then you'll see default template in <code>_exported_templates\default</code></li>
+<li>Edit the files you want to customizem eg:</li>
+</ol>
+<ul>
+<li>HTML changes: modify <code>_exported_templates\default\partials\footer.tmpl.partial</code> and copy the modified file to <code>templates\darkfx\partials\footer.tmpl.partial</code></li>
+<li>CSS changes: modify <code>_exported_templates\default\styles\docfx.css</code> or <code>_exported_templates\default\styles\main.css</code> and copy the modified file to <code>templates\darkfx\styles\main.css</code></li>
+</ul>
+<h2 id="step6-adding-api-documentation-to-the-website">Step6. Adding API Documentation to the Website</h2>
+<p>We built a website from a set of <code>.md</code> files. We call it <code>Conceptual Documentation</code>. Now we will learn to build a website from <code>.NET source code</code>, which is called <code>API Documentation</code>. We will also integrate <code>Conceptual Documentation</code> and <code>API Documentation</code> into one website so that we can navigate from <code>Conceptual</code> to <code>API</code>, or <code>API</code> to <code>Conceptual</code> seamlessly.</p>
+<p>So now our folder layout is:</p>
+<pre><code>  |- ...
+  |- articles\
+  |   |- walkthroughs\
+  |   |   |- docfx-github-actions.md
+  |   |   |- nuget-github-actions.md
+  |   |   |- toc.yml
+  |   |- gettingStarted.md
+  |   |- toc.yml
+  |- images\
+  |    |- details1_image.png
+  |- api\
+  |    |- .gitignore
+  |    |- index.md
+  |    |- toc.yml
+  |- ...
+</code></pre>
+<p>And our <code>docfx.json</code> file is:</p>
+<pre><code>  &quot;metadata&quot;: [
+    {
+      &quot;src&quot;: [
+        {
+          &quot;files&quot;: [
+            &quot;src/**.csproj&quot;
+          ]
+        }
+      ],
+      &quot;dest&quot;: &quot;api&quot;,
+      &quot;disableGitFeatures&quot;: false,
+      &quot;disableDefaultFilter&quot;: false
+    }
+  ],
+  ...
+</code></pre>
+<ol>
+<li>Add a C# project</li>
+</ol>
+<p>By default <code>DocFX</code> use the <code>src</code> folder to generate documentation from the code, but we're going to use <code>C:\Dev\Yugen.Toolkit\</code>, to do this we need to make some changes in the <code>docfx.json</code> file. In this example we're going to generate <code>metadata</code> for <code>Yugen.Toolkit.Uwp.Controls</code> project, to do this we're going to change the follwing parameters:</p>
+<ol>
+<li>Change <code>files</code> from <code>src/**.csproj</code> to <code>Yugen.Toolkit.Uwp.Controls/**.csproj</code></li>
+<li>Add to <code>exclude</code> the following folders <code>**/obj/**</code>, <code>**/bin/**</code>, <code>docs/**</code></li>
+<li>Add a <code>src</code> parameter to <code>src</code> with our solution folder <code>../Yugen.Toolkit</code>.</li>
+<li>Add to <code>properties</code> our <code>TargetFrameworks</code>: <code>netstandard2.0</code></li>
+<li>Change <code>dest</code> from <code>api</code> to <code>metadata/uwp.controls</code> (this is a personal preference)</li>
+<li>So now our <code>docfx.json</code> file is:</li>
+</ol>
+<pre><code>  &quot;metadata&quot;: [
+    {
+      &quot;src&quot;: [
+        {
+          &quot;files&quot;: [
+            &quot;Yugen.Toolkit.Uwp.Controls/**.csproj&quot;
+          ],
+          &quot;exclude&quot;: [
+            &quot;**/obj/**&quot;,
+            &quot;**/bin/**&quot;,
+            &quot;docs/**&quot;
+          ],
+          &quot;src&quot;: &quot;../Yugen.Toolkit&quot;
+        }
+      ],
+      &quot;properties&quot;: {
+        &quot;TargetFrameworks&quot;: &quot;netstandard2.0&quot;
+      },
+      &quot;dest&quot;: &quot;metadata/uwp.controls&quot;,
+      &quot;disableGitFeatures&quot;: false,
+      &quot;disableDefaultFilter&quot;: false
+    }
+  ],
+  ...
+</code></pre>
+<h3 id="if-you-followed-step-5-and-like-me-prefer-to-generate-project-metadata-to-a-spcific-folder">If you followed step 5, and like me prefer to generate project metadata to a spcific folder</h3>
+<ol>
+<li>rename our <code>api</code> folder to <code>metadata</code>.</li>
+<li>Create a <code>uwp.controls</code> folder in <code>metadata</code></li>
+<li>Move <code>index.md</code> and <code>toc.yml</code> to <code>uwp.controls</code></li>
+<li>So now our folder layout is:</li>
+</ol>
+<pre><code>  |- ...
+  |- articles\ 
+  |   |- walkthroughs\
+  |   |   |- docfx-github-actions.md
+  |   |   |- nuget-github-actions.md
+  |   |   |- toc.yml
+  |   |- gettingStarted.md
+  |   |- toc.yml
+  |- images\
+  |    |- details1_image.png
+  |- metadata\
+  |    |- .gitignore
+  |    |- uwp.controls\
+  |    |    |- index.md
+  |    |    |- toc.yml
+  |- ...
+</code></pre>
+<ol start="3">
+<li>We need to change the our <code>docfx.json</code> that now looks like this:</li>
+</ol>
+<pre><code>  ...
+ &quot;content&quot;: [
+    {
+      &quot;files&quot;: [
+        &quot;api/**.yml&quot;,
+        &quot;api/index.md&quot;
+      ]
+    },
+    {
+      &quot;files&quot;: [
+        &quot;articles/**.md&quot;,
+        &quot;articles/**/toc.yml&quot;,
+        &quot;toc.yml&quot;,
+        &quot;*.md&quot;
+      ]
+    }
+  ],
+  ...
+</code></pre>
+<p>to this</p>
+<pre><code>  ...
+  &quot;content&quot;: [
+  {
+    &quot;files&quot;: [
+      &quot;metadata/uwp.controls/*.yml&quot;,
+      &quot;metadata/uwp.controls/index.md&quot;
+    ]
+  },
+  {
+    &quot;files&quot;: [
+      &quot;articles/**.md&quot;,
+      &quot;articles/**/toc.yml&quot;,
+      &quot;toc.yml&quot;,
+      &quot;*.md&quot;
+    ]
+  }
+  ],
+  ...
+</code></pre>
+<ol start="4">
+<li>Now we need to fix the top nvaigation menu, change <code>C:\Dev\Yugen.Toolkit.Docs\toc.yml</code> from this</li>
+</ol>
+<pre><code>  - name: Articles
+    href: articles/
+  - name: Api Documentation
+    href: api/
+    homepage: api/index.md
+</code></pre>
+<p>to this</p>
+<pre><code>  - name: Articles
+    href: articles/
+  - name: Uwp.Controls
+    href: metadata/uwp.controls/
+    homepage: metadata/uwp.controls/index.md
+</code></pre>
+<h2 id="step7-generate-metadata-for-the-c-project">Step7. Generate metadata for the C# project,</h2>
+<p>Run <code>.\docfx\docfx.exe metadata</code></p>
+<p>Congrats! Now if you run command <code>.\docfx\docfx.exe docfx.json</code>, than <code>.\docfx\docfx.exe serve docs</code>, you can now see a page similar to:
+<img src="/Yugen.Toolkit.Docs/images/walkthroughs/docfx/5.png" alt="5"></p>
+<h2 id="step8-overwrite-files">Step8. Overwrite Files</h2>
+<p>DocFX introduces the concept of <code>Overwrite File</code> to modify or add properties to <code>Models</code> without changing the input <code>Conceptual Files</code> and <code>Metadata Files</code>.</p>
+<p><code>Overwrite Files</code> are Markdown files with multiple <code>Overwrite Sections</code> starting with YAML header block. A valid YAML header for an <code>Overwrite Section MUST</code> take the form of valid YAML set between triple-dashed lines and start with property uid.</p>
+<p>For the sake of clarity I rename the <code>apidoc</code> folder to <code>ovewrite</code> and create a <code>uwp.controls</code> folder inside. Here is a basic example of an Overwrite file <code>C:\Dev\Yugen.Toolkit.Docs\overwrite\uwp.controls\Yugen.Toolkit.Uwp.Controls.Collections.md</code>:</p>
+<pre><code>---
+uid: Yugen.Toolkit.Uwp.Controls.Collections
+---
+
+This is overwritten content: Code Snippet
+
+[!code-csharp[EdgeTappedListViewEventArgs](../../../Yugen.Toolkit/Yugen.Toolkit.Uwp.Controls/Collections/EdgeTappedListViewEventArgs.cs)]
+</code></pre>
+<p>this files is going to include a code snippet <code>EdgeTappedListViewEventArgs.cs</code> in the <code>Yugen.Toolkit.Uwp.Controls.Collections</code> page
+So now our folder layout is:</p>
+<pre><code>  |- ...
+  |- ovewrite\
+  |    |- uwp.controls\
+  |    |    |- Yugen.Toolkit.Uwp.Controls.Collections.md
+  |- ...
+</code></pre>
+<p><code>uid</code> for an <code>Overwrite Model</code> stands for the Unique IDentifier of the Model it will overwrite. So it is allowed to have multiple <code>Overwrite Sections</code> with YAML Header containing the same <code>uid</code>. For one <code>Overwrite File</code>, the latter <code>Overwrite Section</code> overwrites the former one with the same <code>uid</code>. For different <code>Overwrite Files</code>, the order of overwrite is Undetermined. So it is suggested to have <code>Overwrite Sections</code> with the same <code>uid</code> in the same <code>Overwrite File</code>.</p>
+<h3 id="apply-overwrite-files">Apply Overwrite Files</h3>
+<p>Inside <code>docfx.json</code>, <code>overwrite</code> is used to specify the <code>Overwrite Files</code>. We need to change the our <code>docfx.json</code> that now looks like this:</p>
+<pre><code>...
+  &quot;overwrite&quot;: [
+      {
+        &quot;files&quot;: [
+          &quot;apidoc/**.md&quot;
+        ],
+        &quot;exclude&quot;: [
+          &quot;obj/**&quot;,
+          &quot;_site/**&quot;
+        ]
+      }
+    ]
+...
+</code></pre>
+<p>to this</p>
+<pre><code>...
+    &quot;overwrite&quot;: [
+    {
+      &quot;files&quot;: [
+        &quot;overwrite/**.md&quot;
+      ],
+      &quot;exclude&quot;: [
+        &quot;obj/**&quot;,
+        &quot;docs/**&quot;
+      ]
+    }
+  ],
+...
+</code></pre>
+<p>Now the page <code>http://localhost:8080/metadata/uwp.controls/Yugen.Toolkit.Uwp.Controls.Collections.html</code> looks like this:
+<img src="/Yugen.Toolkit.Docs/images/walkthroughs/docfx/6.png" alt="6"></p>
+<p>But if you run command <code>.\docfx\docfx.exe docfx.json</code>, than <code>.\docfx\docfx.exe serve docs</code>, you can now see a page similar to:
+<img src="/Yugen.Toolkit.Docs/images/walkthroughs/docfx/7.png" alt="7"></p>
+<p>That's all folks!</p>
+<p>For further details refer to (<a href="https://dotnet.github.io/docfx/index.html">https://dotnet.github.io/docfx/index.html</a>)
+Don't forget to check the rest of walktroughs for CI/CD implementation</p>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Panda-Sharp/Yugen.Toolkit.Docs/blob/release/0.3/docfx_project/articles/walkthroughs/docfx.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <p>Hello World</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

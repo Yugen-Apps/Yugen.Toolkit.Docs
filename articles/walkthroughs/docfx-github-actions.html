@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>CI/CD Publish DocFx to Github Pages with GitHub Actions | Yugen </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="CI/CD Publish DocFx to Github Pages with GitHub Actions | Yugen ">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.min.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Panda-Sharp/Yugen.Toolkit.Docs/blob/release/0.3/docfx_project/articles/walkthroughs/docfx-github-actions.md/#L1">
+
+      <script>
+        MathJax = {
+          options: {
+            processHtmlClass: ['tex2jax_process', 'math']
+          }
+        };
+      </script>
+
+      <script type="text/javascript" src="../../styles/docfx.min.js"></script>
+      <script type="text/javascript" src="../../styles/main.js"></script>
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="cicd-publish-docfx-to-github-pages-with-github-actions">CI/CD Publish DocFx to Github Pages with GitHub Actions</h1>
+
+<h2 id="why-i-wrote-this-walkthrough">Why I Wrote this walkthrough</h2>
+<p>I went trough several tutorials online to achieve this, but everytime I found a different issue or something that can be improved, so I decide to do twrite this, if you're wondering about the different reasons why I decided to spent some of my time to write something I think useful:</p>
+<ul>
+<li>I wanted to use two different repos instead of one, one for my project and one for the docs</li>
+<li>I wanted to publish the doc website to GitHub pages, in the gh-pages branch, not in another repo</li>
+<li>Some tutorial are based on the previous workflow file format, now they switched to YAML</li>
+<li>Some tutorial use Docker and Linux, but since Github actions host support Windows there is really no reason to use something else, this will only slow down our build that will require also the download and installation of Mono</li>
+<li>Some tutorial include the download DocFX in the workflow, I preferred to include the DocFx folder in the repo</li>
+<li>Last but not least, I discovered a GitHub bug that doesn’t trigger the GitHub pages build if you push the repo with your username and password, but you need to use a token</li>
+</ul>
+<h2 id="lets-start">Let's start</h2>
+<p>For this walkthrough I’m Assuming that you have already a full working DocFx build setup and you have a repo with your VS solution for example (<a href="https://github.com/emiliano84/Yugen.Toolkit">https://github.com/emiliano84/Yugen.Toolkit</a>)</p>
+<h3 id="repository-setup">Repository setup</h3>
+<p>Let's create a new repository for the docs for example (<a href="https://github.com/emiliano84/Yugen.Toolkit.Docs">https://github.com/emiliano84/Yugen.Toolkit.Docs</a>) and let's add our docfx documenation solution, including the docfx folder that contains the <code>docfx.exe</code></p>
+<h3 id="github-actions-setup">GitHub Actions Setup</h3>
+<p>Let's create a file in <code>.github/workflows/docfx.yml</code> this contains all the workflow instructions (<a href="https://github.com/emiliano84/Yugen.Toolkit.Docs/blob/master/.github/workflows/docfx.yml">https://github.com/emiliano84/Yugen.Toolkit.Docs/blob/master/.github/workflows/docfx.yml</a>)</p>
+<ul>
+<li>Let’s define our action that will triggered when we push or merge to master branch</li>
+</ul>
+<pre><code class="lang-YAML">name: DocFx Clone, Build And Push
+on:
+  push:
+    branches:    
+      - master   
+</code></pre>
+<ul>
+<li>Let's define our job and tell him which OS to use</li>
+</ul>
+<pre><code class="lang-YAML">jobs:   
+  clone_build_and_push:
+    runs-on: windows-latest
+    name: Clone, Build And Push
+</code></pre>
+<ul>
+<li>Let's write the steps</li>
+</ul>
+<ol>
+<li>Checkout the current Docs repo</li>
+</ol>
+<pre><code class="lang-YAML">steps:
+- uses: actions/checkout@v1   
+</code></pre>
+<ol start="2">
+<li>Clone our repository that contains our vs solution</li>
+</ol>
+<pre><code class="lang-YAML"> - name: Clone
+    run: git clone https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.git ../Yugen.Toolkit
+     shell: bash
+</code></pre>
+<p>I defined a USERNAME and PACKAGES_TOKEN secrets, for the token I generate one with the following permissions:  Repo, read:package, write:packages
+Also I’m using Bash as shell instead of the default powershel</p>
+<ol start="3">
+<li>Configure our git client</li>
+</ol>
+<pre><code class="lang-YAML">- name: Git Config email
+  run: git config --global user.email &quot;emiliano84@github.com&quot;
+  shell: bash
+
+- name: Git Config name
+  run: git config --global user.name &quot;DocFx Bot&quot;
+  shell: bash
+
+- name: Git Config remote.origin.url
+  run: git config --global remote.origin.url &quot;https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.Docs.git&quot;
+  shell: bash
+
+- name: git remote add origin
+  run: git remote add origin https://github.com/emiliano84/Yugen.Toolkit.Docs
+  continue-on-error: true
+  shell: bash
+</code></pre>
+<ol start="4">
+<li>Fetch and checkout</li>
+</ol>
+<pre><code class="lang-YAML">- name: git fetch origin
+  run: git fetch origin
+  shell: bash
+
+- name: git checkout master
+  run: git checkout master
+  shell: bash
+</code></pre>
+<ol start="5">
+<li>Execute DocFX (for this I created a script that we'll see later)</li>
+</ol>
+<pre><code class="lang-YAML">- name: Docfx
+  id: docfx
+  run: &quot;.github/scripts/docfx.bat&quot;
+  shell: bash
+</code></pre>
+<ol start="6">
+<li>Push the DocFX generated website to gh-pages branch</li>
+</ol>
+<pre><code class="lang-YAML">- name: git subtree add
+  run: git subtree add --prefix docs origin/gh-pages  
+  continue-on-error: true
+  shell: bash
+
+- name: Git Add docs
+  run: git add docs/* -f
+  shell: bash
+
+- name: Git Commit
+  run: git commit -m &quot;Docs&quot;
+  shell: bash
+
+# create a local gh-pages branch containing the splitted output folder
+- name: Git subtree
+  run: git subtree split --prefix docs -b gh-pages 
+  shell: bash
+
+# force the push of the gh-pages branch to the remote gh-pages branch at origin
+- name: Git Push
+  run: git push -f https://${{secrets.USERNAME}}:${{secrets.PACKAGES_TOKEN}}@github.com/emiliano84/Yugen.Toolkit.Docs.git gh-pages:gh-pages
+  shell: bash    
+</code></pre>
+<p>Please note that I changed the default DocFx configuration, the website is generated in a folder called Docs</p>
+<ol start="7">
+<li>Lets' create the following script file <code>.github/scripts/docfx.bat</code>
+(<a href="https://github.com/emiliano84/Yugen.Toolkit.Docs/blob/master/.github/scripts/docfx.bat">https://github.com/emiliano84/Yugen.Toolkit.Docs/blob/master/.github/scripts/docfx.bat</a>)</li>
+</ol>
+<p>this file will exectue our docfx build
+<code>&quot;docfx/docfx.exe&quot; docfx.json --property VisualStudioVersion=16.0</code></p>
+<p>This will run docfx.exe in the docfx folder, using the docfx.json and passing as property the version of visual studio we want to use... yes because I encountered one more problem, without passing this version, msbuild in docfx try to use the <code>MSBuild\Microsoft\WindowsXaml\v16.2</code>, but it doesn’t exist, so we need to tell msbuild to use <code>MSBuild\Microsoft\WindowsXaml\v16.0</code></p>
+<ol start="8">
+<li>Let’s set our GitHub Pages
+Repository -&gt; Settings -&gt; GitHub Pages -&gt; Source -&gt; gh-pages branch</li>
+</ol>
+<p>That's all folks</p>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Panda-Sharp/Yugen.Toolkit.Docs/blob/release/0.3/docfx_project/articles/walkthroughs/docfx-github-actions.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <p>Hello World</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

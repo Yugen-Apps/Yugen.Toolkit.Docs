@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>CI/CD Build Nuget Packages and Publish to GitHub Packages with GitHub Actions | Yugen </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="CI/CD Build Nuget Packages and Publish to GitHub Packages with GitHub Actions | Yugen ">
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../styles/docfx.min.css">
+      <link rel="stylesheet" href="../../styles/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Panda-Sharp/Yugen.Toolkit.Docs/blob/release/0.3/docfx_project/articles/walkthroughs/nuget-github-actions.md/#L1">
+
+      <script>
+        MathJax = {
+          options: {
+            processHtmlClass: ['tex2jax_process', 'math']
+          }
+        };
+      </script>
+
+      <script type="text/javascript" src="../../styles/docfx.min.js"></script>
+      <script type="text/javascript" src="../../styles/main.js"></script>
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../images/logo.png" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="cicd-build-nuget-packages-and-publish-to-github-packages-with-github-actions">CI/CD Build Nuget Packages and Publish to GitHub Packages with GitHub Actions</h1>
+
+<h2 id="before-we-start">Before we start</h2>
+<p>I went trough several issues to achieve this, so I decide to do twrite this, hopefully you'll fine it useful.</p>
+<h2 id="lets-start">Let's start</h2>
+<p>Assuming that you already have your repo on GitHub, with you VS solution and projects ready to be packagesd as nuget,
+for example <a href="https://github.com/emiliano84/Yugen.Toolkit">https://github.com/emiliano84/Yugen.Toolkit</a></p>
+<ul>
+<li><a href="https://github.com/emiliano84/Yugen.Toolkit/tree/master/Yugen.Toolkit.Standard">https://github.com/emiliano84/Yugen.Toolkit/tree/master/Yugen.Toolkit.Standard</a></li>
+<li><a href="https://github.com/emiliano84/Yugen.Toolkit/tree/master/Yugen.Toolkit.Uwp">https://github.com/emiliano84/Yugen.Toolkit/tree/master/Yugen.Toolkit.Uwp</a></li>
+</ul>
+<h3 id="github-actions-setup">GitHub Actions Setup</h3>
+<p>Let's create a file in <code>.github/workflows/nuget.yml</code> this conatins all the workflow instructions, for example</p>
+<ul>
+<li><p><a href="https://github.com/emiliano84/Yugen.Toolkit/blob/master/.github/workflows/nugetStandard.yml">https://github.com/emiliano84/Yugen.Toolkit/blob/master/.github/workflows/nugetStandard.yml</a> for .net standard</p>
+</li>
+<li><p><a href="https://github.com/emiliano84/Yugen.Toolkit/blob/master/.github/workflows/nugetUwp.yml">https://github.com/emiliano84/Yugen.Toolkit/blob/master/.github/workflows/nugetUwp.yml</a> for uwp class library</p>
+</li>
+<li><p>Let’s define our action that will triggered when we push or merge to master branch</p>
+</li>
+</ul>
+<pre><code class="lang-YAML">name: Build, Pack and Publish Nuget
+on:
+  push:
+    branches:    
+      - master   
+</code></pre>
+<ul>
+<li>Let's define our job and tell him which OS to use, we're going to use Windows of course</li>
+</ul>
+<pre><code class="lang-YAML">jobs:   
+  build_pack_publish:
+    runs-on: windows-latest
+    name: Build
+</code></pre>
+<ul>
+<li>Let's write the steps</li>
+</ul>
+<ol>
+<li>Checkout the current Docs repo</li>
+</ol>
+<pre><code class="lang-YAML">steps:
+- uses: actions/checkout@v1   
+</code></pre>
+<ol start="2">
+<li>Setup MSbuild, restore the nuget packages and build the solution in Release mode</li>
+</ol>
+<pre><code class="lang-YAML">- name: Setup MSBuild.exe
+  uses: warrenbuckley/Setup-MSBuild@v1
+
+- name: MSBuild Restore
+  run: msbuild Yugen.Toolkit.Standard\Yugen.Toolkit.Standard.csproj /p:Configuration=&quot;Release&quot; /t:restore     
+
+- name: MSBuild Build
+  run: msbuild Yugen.Toolkit.Standard\Yugen.Toolkit.Standard.csproj /p:Configuration=&quot;Release&quot;
+</code></pre>
+<ol start="3">
+<li>Only for a .net standard project we can use this step to build the nuget package, all the nuget properties required will be set in the project file, details later</li>
+</ol>
+<pre><code class="lang-YAML">- name: MSBuild Pack
+  run: msbuild Yugen.Toolkit.Standard\Yugen.Toolkit.Standard.csproj /p:Configuration=&quot;Release&quot; /t:pack 
+</code></pre>
+<ol start="4">
+<li>Setup Nuget</li>
+</ol>
+<pre><code class="lang-YAML">- name: Setup Nuget.exe
+  uses: warrenbuckley/Setup-Nuget@v1
+</code></pre>
+<ol start="5">
+<li>Only for a UWP project we need to use this step to build the nuget package, all the nuget properties require will be in the nuspec file, details later</li>
+</ol>
+<pre><code class="lang-YAML">    - name: Nuget Pack
+      run: nuget pack Yugen.Toolkit.Uwp\Yugen.Toolkit.Uwp.csproj -properties Configuration=Release
+</code></pre>
+<ol start="6">
+<li>Setup our Nuget source and push the package</li>
+</ol>
+<pre><code class="lang-YAML">- name: Nuget Add Source
+  run: nuget source Add -Name &quot;GitHub&quot; -Source &quot;https://nuget.pkg.github.com/emiliano84/index.json&quot; -UserName emiliano84 -Password ${{ secrets.PERSONAL_TOKEN }}
+
+- name: Nuget SetAPIKey
+  run: nuget setApiKey ${{ secrets.PERSONAL_TOKEN }} -Source &quot;GitHub&quot;
+
+- name: Nuget Push
+  run: nuget push Yugen.Toolkit.Standard\bin\Release\*.nupkg -Source &quot;GitHub&quot;
+</code></pre>
+<p>I defined a USERNAME and PACKAGES_TOKEN secrets, for the token I generate one with the following permissions:  Repo, read:package, write:packages</p>
+<h3 id="nuget-properties">Nuget properties</h3>
+<ul>
+<li>For the .net standard project, you need to update the project file with the following properties</li>
+</ul>
+<pre><code>&lt;Version&gt;1.0.6&lt;/Version&gt;
+&lt;PackageProjectUrl&gt;https://github.com/emiliano84/Yugen.Toolkit&lt;/PackageProjectUrl&gt;
+&lt;RepositoryUrl&gt;https://github.com/emiliano84/Yugen.Toolkit.git&lt;/RepositoryUrl&gt;
+</code></pre>
+<p>for example
+<a href="https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Standard/Yugen.Toolkit.Standard.csproj">https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Standard/Yugen.Toolkit.Standard.csproj</a></p>
+<ul>
+<li>For the UWP project, you need to update the nuspec file with the following properties</li>
+</ul>
+<pre><code>&lt;id&gt;Yugen.Toolkit.Uwp&lt;/id&gt;
+&lt;version&gt;1.0.6&lt;/version&gt;
+&lt;authors&gt;emiliano84&lt;/authors&gt;
+&lt;description&gt;Yugen.Toolkit.Uwp&lt;/description&gt;
+&lt;repository type=&quot;git&quot; url=&quot;https://github.com/emiliano84/Yugen.Toolkit.git&quot; /&gt; 
+&lt;projectUrl&gt;https://github.com/emiliano84/Yugen.Toolkit&lt;/projectUrl&gt;
+</code></pre>
+<p>for exmple
+<a href="https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Uwp/Yugen.Toolkit.Uwp.nuspec">https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Uwp/Yugen.Toolkit.Uwp.nuspec</a></p>
+<p>That's all folks</p>
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/Panda-Sharp/Yugen.Toolkit.Docs/blob/release/0.3/docfx_project/articles/walkthroughs/nuget-github-actions.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+        
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <p>Hello World</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
