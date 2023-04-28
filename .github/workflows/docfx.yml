@@ -1,0 +1,37 @@
+name: DocFx Clone, Build And Push
+on:
+  push:
+    branches:
+      - release/*
+
+jobs:
+  clone_build_and_push:
+    runs-on: windows-latest
+    name: Clone, Build And Push
+    steps:
+    - name: Dotnet Setup
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.x
+
+    - name: Checkout Docs
+      uses: actions/checkout@v3
+      with:
+        path: docs
+
+    - name: Checkout Source
+      uses: actions/checkout@v3
+      with:
+        repository: Yugen-Apps/Yugen.Toolkit
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: Yugen.Toolkit
+
+    - run: dotnet tool update -g docfx
+
+    - run: docfx docs/docfx_project/docfx.json
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/docfx_project/_site

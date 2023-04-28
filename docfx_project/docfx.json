@@ -1,0 +1,64 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [
+            "Yugen.Toolkit.Uwp.Controls/bin/Release/**/Yugen.Toolkit.Uwp.Controls.dll"
+          ],
+          "src": "../../Yugen.Toolkit"
+        }
+      ],
+      "dest": "metadata/uwp.controls",
+      "includePrivateMembers": false,
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false,
+      "noRestore": false,
+      "namespaceLayout": "flattened",
+      "memberLayout": "samePage",
+      "allowCompilationErrors": false
+    }
+  ],
+  "build": {
+    "globalMetadata": {
+      "_appTitle": "Yugen",
+      "_appLogoPath": "images/logo.png",
+      "_appFooter": "<p>Hello World</p>"
+    },
+    "content": [
+      {
+        "files": [
+          "metadata/toc.yml",
+          "metadata/index.md",
+          "metadata/uwp.controls/*.yml",
+          "metadata/uwp.controls/index.md"
+        ]
+      },
+      {
+        "files": [
+          "toc.yml",
+          "index.md",
+          "articles/**/toc.yml",
+          "articles/**.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": [
+      "default",
+      "modern"
+    ],
+    "postProcessors": [],
+    "keepFileLink": false,
+    "disableGitFeatures": false
+  }
+}
