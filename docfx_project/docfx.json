@@ -22,8 +22,7 @@
   "build": {
     "globalMetadata": {
       "_appTitle": "Yugen",
-      "_appLogoPath": "images/logo.png",
-      "_appFooter": "<p>Hello World</p>"
+      "_appLogoPath": "images/logo.png"
     },
     "content": [
       {
@@ -55,7 +54,8 @@
     "fileMetadataFiles": [],
     "template": [
       "default",
-      "modern"
+      "modern",
+      "template"
     ],
     "postProcessors": [],
     "keepFileLink": false,
