@@ -7,25 +7,28 @@
       <meta name="title" content="CI/CD Build Nuget Packages and Publish to GitHub Packages with GitHub Actions | Yugen ">
       
       <link rel="icon" href="../../favicon.ico">
-      <link rel="stylesheet" href="../../styles/docfx.min.css">
-      <link rel="stylesheet" href="../../styles/main.css">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
       <meta name="docfx:navrel" content="../../toc.html">
       <meta name="docfx:tocrel" content="../toc.html">
       
       
-      <meta name="docfx:docurl" content="https://github.com/Yugen-Apps/Yugen.Toolkit.Docs/blob/main/docfx_project/articles/walkthroughs/nuget-github-actions.md/#L1">
-
-      <script>
-        MathJax = {
-          options: {
-            processHtmlClass: ['tex2jax_process', 'math']
-          }
-        };
-      </script>
-
-      <script type="text/javascript" src="../../styles/docfx.min.js"></script>
-      <script type="text/javascript" src="../../styles/main.js"></script>
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/Yugen-Apps/Yugen.Toolkit.Docs/blob/develop/docfx_project/articles/walkthroughs/nuget-github-actions.md/#L1">
   </head>
+
+  <script type="module">
+    import options from './../../public/main.js'
+    import { init } from './../../public/docfx.min.js'
+    init(options)
+  </script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
 
   <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
     <header class="bg-body border-bottom">
@@ -179,10 +182,27 @@ on:
 <p>for exmple
 <a href="https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Uwp/Yugen.Toolkit.Uwp.nuspec">https://github.com/emiliano84/Yugen.Toolkit/blob/master/Yugen.Toolkit.Uwp/Yugen.Toolkit.Uwp.nuspec</a></p>
 <p>That's all folks</p>
-</article>
+<div id="disqus-wrapper">
+            <div id="disqus_thread"></div>
+          </div>
+          <script>        
+              var disqus_config = function () {
+                this.page.url = 'https://yugen-apps.github.io/Yugen.Toolkit.Docs/articles/walkthroughs/nuget-github-actions.html';
+                // this.page.identifier = 'yugen-apps';
+              };
+
+              (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'https://yugen-apps.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+              })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </article>
 
         <div class="contribution d-print-none">
-          <a href="https://github.com/Yugen-Apps/Yugen.Toolkit.Docs/blob/main/docfx_project/articles/walkthroughs/nuget-github-actions.md/#L1" class="edit-link">Edit this page</a>
+          <a href="https://github.com/Yugen-Apps/Yugen.Toolkit.Docs/blob/develop/docfx_project/articles/walkthroughs/nuget-github-actions.md/#L1" class="edit-link">Edit this page</a>
         </div>
 
         <div class="next-article d-print-none border-top" id="nextArticle"></div>
@@ -198,7 +218,7 @@ on:
     <footer class="border-top">
       <div class="container-xxl">
         <div class="flex-fill">
-          <p>Hello World</p>
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
         </div>
       </div>
     </footer>

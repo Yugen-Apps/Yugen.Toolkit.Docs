@@ -1,0 +1,43 @@
+article h1 {
+  font-size: 40px;
+}
+
+body {
+  --bs-link-color-rgb: 66, 184, 131 !important;
+  --bs-link-hover-color-rgb: 64, 180, 128 !important;
+}
+
+#disqus-wrapper body {
+  --primary-color: #f6f4ec;
+  --secondary-color: #14172b;
+}
+
+#disqus-wrapper body {
+  color: #f7f7f7;
+  background: #3b3b3f;
+}
+
+#disqus-wrapper h1 {
+  color: #fffcc3;
+  background: #825757;
+}
+
+#disqus-wrapper .check {
+  color: #fff;
+  background: #464646;
+}
+
+#disqus-wrapper .btn {
+  background: #2b2b2b;
+  color: #ffffda;
+}
+
+#disqus-wrapper #disqus_thread {
+  color: #ecebd9;
+  background: #444;
+}
+
+#disqus-wrapper a {
+  color: yellow;
+}
+
