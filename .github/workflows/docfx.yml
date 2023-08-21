@@ -45,7 +45,11 @@ jobs:
       uses: microsoft/setup-msbuild@v1      
 
     - name: MSBuild Build
-      run: msbuild ${{ env.PROJECT_PATH }}/${{ env.PROJECT_FOLDER }}/${{ env.PROJECT_FILE }} /p:Configuration=${{ env.PROJECT_CONFIGURATION }} /p:TargetFramwork=uap10.0.18362
+      run: |
+        msbuild ${{ env.PROJECT_PATH }}/${{ env.PROJECT_FOLDER }}/${{ env.PROJECT_FILE }} `
+          /p:Configuration=${{ env.PROJECT_CONFIGURATION }} `
+          /p:TargetFramwork=uap10.0.18362 `
+          /p:Platform=x64
 
     - run: dotnet tool update -g docfx
 
